@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.049,=D:\Delphi XE7\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.112,=D:\Delphi XE7\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.874,D:\Delphi XE7\Projects\Unit1.pas=D:\Delphi XE7\Projects\ZanPlayer\Main.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.939,D:\Delphi XE7\Projects\Project1.dproj=D:\Delphi XE7\Projects\ZanPlayer\ZanPlayer.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.874,D:\Delphi XE7\Projects\Unit1.dfm=D:\Delphi XE7\Projects\ZanPlayer\Main.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.415,=D:\Delphi XE7\Projects\Unit1.pas</Transaction>
+  </Transactions>
+</BorlandProject>
