@@ -91,6 +91,25 @@
             <Form>frmPlayer</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="bass.pas"/>
+        <DCCReference Include="Playlist1.pas">
+            <Form>frmPlaylist1</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Playlist2.pas">
+            <Form>frmPlaylist2</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Optiuni.pas">
+            <Form>frmOptiuni</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <None Include="ModelSupport_ZanPlayer\default.txaPackage"/>
+        <None Include="ModelSupport_ZanPlayer\default.txvpck"/>
+        <None Include="ModelSupport_ZanPlayer\ZanPlayer\default.txvpck"/>
+        <None Include="ModelSupport_ZanPlayer\Playlist1\default.txaPackage"/>
+        <None Include="ModelSupport_ZanPlayer\Playlist2\default.txaPackage"/>
+        <None Include="ModelSupport_ZanPlayer\BASS\default.txvpck"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -120,6 +139,42 @@
                 <DeployFile LocalName="Win32\Debug\ZanPlayer.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>ZanPlayer.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_ZanPlayer\Playlist1\default.txaPackage" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_ZanPlayer\BASS\default.txvpck" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_ZanPlayer\Playlist2\default.txaPackage" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_ZanPlayer\default.txaPackage" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_ZanPlayer\default.txvpck" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="ModelSupport_ZanPlayer\ZanPlayer\default.txvpck" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -458,6 +513,7 @@
                 <Platform value="Win32">True</Platform>
                 <Platform value="Win64">False</Platform>
             </Platforms>
+            <ModelSupport>True</ModelSupport>
         </BorlandProject>
         <ProjectFileVersion>12</ProjectFileVersion>
     </ProjectExtensions>
