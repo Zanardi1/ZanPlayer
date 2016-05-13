@@ -33,4 +33,18 @@ object frmOptiuni: TfrmOptiuni
     NumGlyphs = 2
     TabOrder = 1
   end
+  object TabControl1: TTabControl
+    Left = 16
+    Top = 16
+    Width = 313
+    Height = 169
+    MultiLine = True
+    TabOrder = 2
+    Tabs.Strings = (
+      'Pornire'
+      'Playlist 1'
+      'Diverse')
+    TabIndex = 0
+    TabStop = False
+  end
 end

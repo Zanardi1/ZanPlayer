@@ -6,7 +6,8 @@ uses
   bass in 'bass.pas',
   Playlist1 in 'Playlist1.pas' {frmPlaylist1},
   Playlist2 in 'Playlist2.pas' {frmPlaylist2},
-  Optiuni in 'Optiuni.pas' {frmOptiuni};
+  Optiuni in 'Optiuni.pas' {frmOptiuni},
+  GestionareOptiuni in 'GestionareOptiuni.pas';
 
 {$R *.res}
 

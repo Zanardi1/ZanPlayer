@@ -50,6 +50,7 @@ object frmPlayer: TfrmPlayer
     Width = 374
     Height = 17
     TabOrder = 0
+    OnMouseDown = MoveSongToPosition
   end
   object bitbtnPrevious: TBitBtn
     Left = 16
@@ -902,11 +903,6 @@ object frmPlayer: TfrmPlayer
     TabOrder = 12
     TabStop = False
     OnClick = ShowOptionsWindow
-  end
-  object OpenDialog1: TOpenDialog
-    Filter = 'mp3 files|*.mp3'
-    Left = 216
-    Top = 16
   end
   object Timer1: TTimer
     Enabled = False

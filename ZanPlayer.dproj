@@ -104,12 +104,14 @@
             <Form>frmOptiuni</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="GestionareOptiuni.pas"/>
         <None Include="ModelSupport_ZanPlayer\default.txaPackage"/>
         <None Include="ModelSupport_ZanPlayer\default.txvpck"/>
         <None Include="ModelSupport_ZanPlayer\ZanPlayer\default.txvpck"/>
         <None Include="ModelSupport_ZanPlayer\Playlist1\default.txaPackage"/>
         <None Include="ModelSupport_ZanPlayer\Playlist2\default.txaPackage"/>
         <None Include="ModelSupport_ZanPlayer\BASS\default.txvpck"/>
+        <None Include="ZanPlayer.todo"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -148,7 +150,7 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="ModelSupport_ZanPlayer\BASS\default.txvpck" Configuration="Debug" Class="ProjectFile">
+                <DeployFile LocalName="ModelSupport_ZanPlayer\ZanPlayer\default.txvpck" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
@@ -166,13 +168,19 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
+                <DeployFile LocalName="ZanPlayer.todo" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="ModelSupport_ZanPlayer\default.txvpck" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="ModelSupport_ZanPlayer\ZanPlayer\default.txvpck" Configuration="Debug" Class="ProjectFile">
+                <DeployFile LocalName="ModelSupport_ZanPlayer\BASS\default.txvpck" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>

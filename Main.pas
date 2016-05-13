@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.Buttons, Bass,
-  Playlist1, Playlist2, Vcl.ExtCtrls, Optiuni, Math;
+  Playlist1, Playlist2, Vcl.ExtCtrls, Optiuni, Math, GestionareOptiuni;
 
 type
   TfrmPlayer = class(TForm)
@@ -26,7 +26,6 @@ type
     shRepLED: TShape;
     shShfLED: TShape;
     bitbtnOptions: TBitBtn;
-    OpenDialog1: TOpenDialog;
     Timer1: TTimer;
     procedure Startup(Sender: TObject);
     procedure ToggleFirstPlaylist(Sender: TObject);
@@ -40,6 +39,8 @@ type
     procedure StopSong(Sender: TObject);
     procedure MuteOrSoundSong(Sender: TObject);
     procedure ProcessEvents(Sender: TObject);
+    procedure MoveSongToPosition(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
   private
     { Private declarations }
     RepeatSongs, ShuffleSongs:boolean;
@@ -53,19 +54,60 @@ type
     { Public declarations }
   end;
 
+  PlaylistInfo=record
+    FileName:TStrings;
+    ShownFileName:TStrings;
+    ID: array of HSTREAM;
+  end;
+
+//Structura PlaylistInfo retine anumite lucruri despre playlisturi, lucruri
+//importante pentru player si din punct de vedere al interfetei:
+// 1. FileName retine fisierele, cu caile lor, incarcate in playlist. E util
+//    pentru player, sa stie ce melodii sa redea;
+// 2. ShownFileName retine denumirile fisierelor retinute in FileName. E util
+//    din motive de prezentare, caci aceste denumiri vor fi aratate in fereastra
+//    de playlist;
+// 3. ID retine valorile intoarse de catre functia BASS_StreamCreateFile, functie
+//    care trebuie apelata, avand ca parametru fiecare dintre fisierele incarcate.
+//    ID e util in cazul redarii fisierelor de catre player
+
 var
   frmPlayer: TfrmPlayer;
+  FirstPlaylist:PlaylistInfo;
+  Optiuni:TOptiuni; //instanta pentru clasa TOptiuni;
 
 implementation
 
 {$R *.dfm}
+
+function AddLeadingZeroes(const aNumber, Length : integer):string;
+//Functia adauga zerouri in fata unui numar si intoarce sirul rezultat.
+//aNumber retine numarul in fata caruia trebuie adaugate zerourile;
+//Length retine lungimea finala pe care trebuie sa o aiba numarul.
+//Din aceste doua variabile reiese ca functia va adauga
+//(Length-numarul de cifre al lui aNumber) zerouri
+begin
+  result := Format('%.*d', [Length, aNumber]) ;
+end;
 
 procedure TfrmPlayer.ChangeSongVolume(Sender: TObject);
 //Schimba volumul melodiei. Pentru ca trackbar-ul are scala intre 1 si 100 si
 //functia seteaza volumul ca un numar intre 0 si 1, atunci trebuie efectuata
 //o impartire la 100
 begin
+  Mute:=false; //Daca volumul e dat pe mute si utilizatorul schimba volumul melodiei
   BASS_SetVolume(tbVolume.Position/100); //Stabilesc volumul melodiei
+end;
+
+procedure TfrmPlayer.MoveSongToPosition(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+//Procedura se ocupa de tot ce e necesar pentru a muta melodia la pozitia pe care
+//utilizatorul face click
+begin
+  if Button=mbLeft then
+    begin
+      BASS_ChannelSetPosition(FirstPlaylist.ID[SongSelected],BASS_ChannelSeconds2Bytes(FirstPlaylist.ID[SongSelected],pbProgressBar.Position),BASS_POS_BYTE);
+    end;
 end;
 
 procedure TfrmPlayer.MuteOrSoundSong(Sender: TObject);
@@ -91,26 +133,41 @@ end;
 procedure TfrmPlayer.PauseSong(Sender: TObject);
 //Ce trebuie efectuat pentru a pune melodia pe pauza;
 begin
-  BASS_Pause;
+  BASS_ChannelPause(FirstPlaylist.ID[SongSelected]);
+  Timer1.Enabled:=false;
 end;
 
 procedure TfrmPlayer.PlaySong(Sender: TObject);
 //Ce trebuie facut pentru a reda melodia aleasa
-var a:HSTREAM;
-    f:PChar;
 begin
-  OpenDialog1.Execute(Application.Handle);
-  f:=PChar(OpenDialog1.FileName);
-  a:=BASS_StreamCreateFile(false,f,0,0,BASS_UNICODE);
-  pbProgressBar.Max:=Trunc(BASS_ChannelBytes2Seconds(a,BASS_ChannelGetLength(a,BASS_POS_BYTE)));
-  BASS_ChannelPlay(a,false);
-  Timer1.Enabled:=true;
-  lblTimer.Caption:=FloatToStr(RoundTo(BASS_ChannelBytes2Seconds(a,BASS_ChannelGetLength(a,BASS_POS_BYTE)),-2)); //Calculeaza lungimea melodiei, in secunde
+  if FirstPlaylist.FileName.Count=0 then //Daca playlistul e gol, atunci...
+    Playlist1.frmPlaylist1.AddSongsToPlaylist(Application);//...deschide fereastra de selectie a melodiilor
+  if SongSelected=-1 then //Daca utilizatorul apasa butonul play fara sa fi fost selectata o melodie din playlist, atunci este redata prima piesa incarcata
+    begin
+     SongSelected:=0;
+     Playlist1.frmPlaylist1.lbPlaylist.Selected[0]:=true;
+    end;
+  BASS_ChannelPlay(Main.FirstPlaylist.ID[Playlist1.SongSelected],false); //Reda melodia selectata din playlist
+  Timer1.Enabled:=true; //pornesc cronometrul
+  lblSongName.Caption:=Playlist1.frmPlaylist1.lbPlaylist.Items[SongSelected]; //Este afisata melodia care este redata
+  pbProgressBar.Max:=Trunc(BASS_ChannelBytes2Seconds(Main.FirstPlaylist.ID[Playlist1.SongSelected],BASS_ChannelGetLength(Main.FirstPlaylist.ID[Playlist1.SongSelected],BASS_POS_BYTE))); //Stabileste limita superioara a barei de progres la lungimea melodiei (sec)
 end;
 
 procedure TfrmPlayer.ProcessEvents(Sender: TObject);
+//Procedura se ocupa de tot ce trebuie sa se intample o data pe secunda, in timp
+//ce melodia este redata
+var MinutesElapsed, SecondsElapsed: integer;
+//Aceste doua variabile retin cate minute si cate secunde au trecut din melodie
 begin
- pbProgressBar.Position:=pbProgressBar.Position+1;
+ pbProgressBar.Position:=pbProgressBar.Position+1; //Se modifica bara de progres
+ if pbProgressBar.Position=pbProgressBar.Max then //Daca melodia a ajuns la capat atunci
+  begin
+    Timer1.Enabled:=false; //Opreste cronometrul;
+  end;
+ SecondsElapsed:=Round(BASS_ChannelBytes2Seconds(FirstPlaylist.ID[Playlist1.SongSelected],BASS_ChannelGetPosition(FirstPlaylist.ID[playlist1.SongSelected],BASS_POS_BYTE))); //Afla numarul de secunde ale melodiei
+ MinutesElapsed:=SecondsElapsed div 60; //Calculeaza numarul de minute...
+ SecondsElapsed:=SecondsElapsed-(MinutesElapsed*60); //...si numarul de secunde
+ lblTimer.Caption:=AddLeadingZeroes(MinutesElapsed,2)+':'+AddLeadingZeroes(SecondsElapsed,2); //Afiseaza cat timp a trecut
 end;
 
 procedure TfrmPlayer.ShowOptionsWindow(Sender: TObject);
@@ -122,6 +179,8 @@ end;
 
 procedure TfrmPlayer.Startup(Sender: TObject);
 begin
+ Optiuni.Create; //Creaza instanta care se ocupa de optiuni
+
  BASS_Init(-1,44100,0,Handle,nil); //Initializarea si incarcarea dll-ului
 
  if RepeatSongs then //Daca playerul repeta playlistul, atunci...
@@ -143,12 +202,19 @@ begin
     end;
 
   BASS_SetVolume(tbVolume.Position); //Se da volumul melodiei la valoarea stabilita de trackbar
+
+  FirstPlaylist.FileName:=TStringList.Create;
+  FirstPlaylist.ShownFileName:=TStringList.Create;
+//Apeleaza constructorii celor doua variabile de tip TStrings
+
+  SongSelected:=-1; //La pornirea programului nu este selectata nicio melodie din playlist
 end;
 
 procedure TfrmPlayer.StopSong(Sender: TObject);
 //Ce trebuie facut pentru a opri melodia
 begin
-  BASS_Stop;
+  BASS_ChannelStop(FirstPlaylist.ID[SongSelected]);
+  Timer1.Enabled:=false;
 end;
 
 procedure TfrmPlayer.ToggleFirstPlaylist(Sender: TObject);

@@ -22,6 +22,7 @@ object frmPlaylist1: TfrmPlaylist1
     TabStop = False
     ItemHeight = 13
     TabOrder = 0
+    OnDblClick = PlaySelectedSong
   end
   object bitbtnUp: TBitBtn
     Left = 336
@@ -59,6 +60,7 @@ object frmPlaylist1: TfrmPlaylist1
     Caption = '-'
     TabOrder = 4
     TabStop = False
+    OnClick = ShowDeletePlaylistMenu
   end
   object bitbtnSaveToPlaylist: TBitBtn
     Left = 78
@@ -83,8 +85,20 @@ object frmPlaylist1: TfrmPlaylist1
   end
   object odAddSongsToPlaylist: TOpenDialog
     Filter = 'fisiere mp3|*.mp3'
-    Options = [ofHideReadOnly, ofAllowMultiSelect, ofPathMustExist, ofFileMustExist, ofEnableSizing]
+    Options = [ofHideReadOnly, ofAllowMultiSelect, ofPathMustExist, ofFileMustExist]
+    Title = 'Alege melodia sau melodiile dorite'
     Left = 80
     Top = 64
+  end
+  object pmDeleteFromPlaylist: TPopupMenu
+    Left = 256
+    Top = 64
+    object miDeleteSongs: TMenuItem
+      Caption = 'Sterge melodiile'
+    end
+    object miDeletePlaylist: TMenuItem
+      Caption = 'Sterge playlistul'
+      OnClick = DeletePlaylist
+    end
   end
 end
