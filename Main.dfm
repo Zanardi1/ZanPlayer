@@ -2,9 +2,10 @@ object frmPlayer: TfrmPlayer
   Left = 0
   Top = 0
   BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
   Caption = 'ZanPlayer'
-  ClientHeight = 195
-  ClientWidth = 409
+  ClientHeight = 205
+  ClientWidth = 419
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -14,6 +15,7 @@ object frmPlayer: TfrmPlayer
   OldCreateOrder = False
   ShowHint = True
   OnCreate = Startup
+  OnDestroy = Bye
   PixelsPerInch = 96
   TextHeight = 13
   object lblTimer: TLabel

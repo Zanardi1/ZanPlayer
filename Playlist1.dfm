@@ -1,9 +1,11 @@
 object frmPlaylist1: TfrmPlaylist1
   Left = 0
   Top = 0
+  BorderIcons = [biMinimize, biMaximize]
+  BorderStyle = bsSingle
   Caption = 'Playlist 1'
-  ClientHeight = 204
-  ClientWidth = 409
+  ClientHeight = 214
+  ClientWidth = 419
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -73,8 +75,8 @@ object frmPlaylist1: TfrmPlaylist1
   end
   object pmAddToPlaylist: TPopupMenu
     TrackButton = tbLeftButton
-    Left = 184
-    Top = 64
+    Left = 48
+    Top = 80
     object miAddSongs: TMenuItem
       Caption = 'Adauga melodii'
       OnClick = AddSongsToPlaylist
@@ -87,12 +89,12 @@ object frmPlaylist1: TfrmPlaylist1
     Filter = 'fisiere mp3|*.mp3'
     Options = [ofHideReadOnly, ofAllowMultiSelect, ofPathMustExist, ofFileMustExist]
     Title = 'Alege melodia sau melodiile dorite'
-    Left = 80
-    Top = 64
+    Left = 56
+    Top = 32
   end
   object pmDeleteFromPlaylist: TPopupMenu
-    Left = 256
-    Top = 64
+    Left = 176
+    Top = 40
     object miDeleteSongs: TMenuItem
       Caption = 'Sterge melodiile'
     end

@@ -3,7 +3,8 @@ unit Playlist2;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons;
 
 type
@@ -25,15 +26,17 @@ var
   frmPlaylist2: TfrmPlaylist2;
 
 implementation
+
 uses Main;
 
 {$R *.dfm}
 
 procedure TfrmPlaylist2.Startup(Sender: TObject);
-//Questii de facut la crearea ferestrei
+// Questii de facut la crearea ferestrei
 begin
- Top:=Main.frmPlayer.Top+Main.frmPlayer.Height;
- Left:=Main.frmPlayer.Left;
+  Left := Main.OptiuniPlayer.GetOptionInteger(5);
+  // Citeste coordonatele ferestrei
+  Top := Main.OptiuniPlayer.GetOptionInteger(6);
 end;
 
 end.

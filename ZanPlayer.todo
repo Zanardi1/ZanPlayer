@@ -1,4 +1,4 @@
-{TODO : Mutarea redarii unei melodii intr-un anumit punct functioneaza numai pentru o fractiune de secunda. Apoi, redarea revine in punctul de unde a plecat.}
+{DONE : Mutarea redarii unei melodii intr-un anumit punct functioneaza numai pentru o fractiune de secunda. Apoi, redarea revine in punctul de unde a plecat.}
 {TODO :Atunci cand aleg 2+ melodii, sunt retinute acestea in ordine alfabetica in odAddSongsToPlaylist.Files, indiferent de ordinea in care vreau eu sa le retin}
 {TODO : Atunci cand este redata o melodie si fac dublu click pe a doua, programul le canta pe amandoua in acelasi timp.}
 {TODO : De verificat daca metoda cu stergerile celor doua liste de tip TStrings este potrivita. Trebuie verificat deoarece nu stiu (inca) daca stergerile se vor observa la playlisturi mai mari}

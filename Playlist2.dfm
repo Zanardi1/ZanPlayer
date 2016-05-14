@@ -1,9 +1,11 @@
 object frmPlaylist2: TfrmPlaylist2
   Left = 0
   Top = 0
+  BorderIcons = [biMinimize, biMaximize]
+  BorderStyle = bsSingle
   Caption = 'Playlist 2'
-  ClientHeight = 204
-  ClientWidth = 447
+  ClientHeight = 214
+  ClientWidth = 419
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,22 +19,22 @@ object frmPlaylist2: TfrmPlaylist2
   object lbPlaylist: TListBox
     Left = 16
     Top = 16
-    Width = 345
+    Width = 305
     Height = 153
     ItemHeight = 13
     TabOrder = 0
   end
   object bitbtnDown: TBitBtn
-    Left = 376
-    Top = 120
+    Left = 336
+    Top = 128
     Width = 50
     Height = 25
     Caption = 'Down'
     TabOrder = 1
   end
   object bitbtnUp: TBitBtn
-    Left = 376
-    Top = 40
+    Left = 336
+    Top = 32
     Width = 50
     Height = 25
     Caption = 'Up'
