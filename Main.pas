@@ -46,7 +46,10 @@ type
     procedure Bye(Sender: TObject);
   private
     { Private declarations }
+    TempVolume: Integer; // retine volumul dinainte de Mute
+
     procedure SkipToNextSong;
+    procedure UnselectUnplayedSongs(SongNo: Integer);
   public
     { Public declarations }
   end;
@@ -87,11 +90,91 @@ begin
   result := Format('%.*d', [Length, aNumber]);
 end;
 
+procedure TfrmPlayer.UnselectUnplayedSongs(SongNo: Integer);
+// Procedura deselecteaza din playlist toate melodiile care nu sunt redate. Melodia
+// SongNo este cea redata si pe ea o selecteaza
+var
+  i: Integer;
+begin
+  for i := 0 to SongNo - 1 do
+    Playlist1.frmPlaylist1.lbPlaylist.Selected[i] := false;
+  // Deselecteaza melodiile dinaintea melodiei selectate
+
+  for i := SongNo + 1 to FirstPlaylist.FileName.Count - 1 do
+    // Deselecteaza melodiile de dupa cea selectata
+    Playlist1.frmPlaylist1.lbPlaylist.Selected[i] := false;
+
+  Playlist1.frmPlaylist1.lbPlaylist.Selected[SongNo] := true;
+  // Selecteaza melodia care trebuie
+end;
+
 procedure TfrmPlayer.SkipToNextSong;
 // Procedura de ocupa de ce trebuie facut pentru a trece la melodia urmatoare
 // din playlist
 begin
-
+  inc(SongSelected);
+  // Creste numarul melodiei selectate cu 1 (<=> trece la melodia urmatoare)
+  if FirstPlaylist.FileName.Count = 1 then
+  { Din motive pe care nu le descopar, pentru ca aceasta procedura sa functioneze
+    corect, trebuie luate separat cazurile in care playlistul are o singura melodie
+    si cazul in care playlistul are 2+ melodii, desi algoritmul de functionare este,
+    in ambele cazuri, acelasi. }
+  begin
+    if OptiuniPlayer.GetOptionBoolean(8) then
+    // Daca e activata repetarea, atunci o ia de la capatul playlistului
+    begin
+      SongSelected := 0;
+      UnselectUnplayedSongs(0);
+      PlaySong(Application);
+    end
+    else if OptiuniPlayer.GetOptionBoolean(9) then
+    // Daca e activata redarea amestecata
+    begin
+      Randomize;
+      SongSelected := random(1);
+      PlaySong(Application);
+    end
+    else // "Cazul normal"
+    begin
+      BASS_ChannelStop(FirstPlaylist.ID[0]);
+      BASS_ChannelSetPosition(FirstPlaylist.ID[0], 0, BASS_POS_BYTE);
+    end;
+  end
+  else if SongSelected > FirstPlaylist.FileName.Count - 1 then
+  // Daca playlistul are 2+ melodii si a ajuns la capatul playlistului...
+  begin
+    if OptiuniPlayer.GetOptionBoolean(8) then
+    // Daca e activata repetarea, atunci o ia de la capatul playlistului
+    begin
+      SongSelected := 0;
+      UnselectUnplayedSongs(SongSelected); // Selecteaza melodia care se reda
+      PlaySong(Application); // Reda melodia selectata
+    end
+    else
+    begin
+      BASS_ChannelStop(FirstPlaylist.ID[SongSelected - 1]);
+      // Opreste ultima melodie redata
+      BASS_ChannelSetPosition(FirstPlaylist.ID[SongSelected - 1], 0,
+        BASS_POS_BYTE); // Aduce la 0 ultima melodie redata
+    end;
+  end
+  else // Daca nu a ajuns la capat...
+  begin
+    if OptiuniPlayer.GetOptionBoolean(9) then
+    // Daca e activata redarea amestecata
+    begin
+      Randomize;
+      SongSelected := random(FirstPlaylist.FileName.Count + 1);
+      // alege un numar aleatoriu
+      UnselectUnplayedSongs(SongSelected); // Selecteaza melodia care se reda
+      PlaySong(Application); // Reda melodia selectata
+    end
+    else // Daca e dezactivata redarea amestecata (cazul "normal")
+    begin
+      UnselectUnplayedSongs(SongSelected); // Selecteaza melodia care se reda
+      PlaySong(Application); // Reda melodia selectata
+    end;
+  end;
 end;
 
 procedure TfrmPlayer.Bye(Sender: TObject);
@@ -113,6 +196,8 @@ begin
 
   OptiuniPlayer.WriteToFile; // Scrie optiunile in fisier
   OptiuniPlayer.Free; // Distruge obiectul
+  BASS_Stop;
+  BASS_SetVolume(1);
 end;
 
 procedure TfrmPlayer.ChangeSongVolume(Sender: TObject);
@@ -149,18 +234,19 @@ procedure TfrmPlayer.MuteOrSoundSong(Sender: TObject);
 // Procedura opreste sunetul sau il reda inapoi
 begin
   if OptiuniPlayer.GetOptionBoolean(10) then
-  // Daca se vrea redarea inapoi a sunetului
+  // Daca se vrea redarea inapoi a sunetului (Mute=true)
   begin
-    tbVolume.Position := Trunc(OptiuniPlayer.GetOptionInteger(7) * 100);
+    tbVolume.Position := Trunc(TempVolume);
     // Stabilesc si pozitia trackbar-ului.
     // Modificarea pozitiei trackbar-ului duce si la modificarea volumului
     // sunetului datorita
     // handler-ului ChangeSongVolume
     OptiuniPlayer.SetOptionBoolean(10, false); // Setez variabila la fals
   end
-  else // Daca se vrea luarea lui
+  else // Daca se vrea luarea lui (Mute=false)
   begin
-    OptiuniPlayer.SetOptionInteger(7, Trunc(BASS_GetVolume));
+    TempVolume := tbVolume.Position;
+    // OptiuniPlayer.SetOptionInteger(7, Trunc(BASS_GetVolume));
     // Retin volumul actual stabilit;
     tbVolume.Position := 0; // Stabilesc si pozitia trackbar-ului.
     // Modificarea pozitiei trackbar-ului duce si la modificarea volumului
@@ -199,9 +285,7 @@ begin
     [Playlist1.SongSelected], BASS_ChannelGetLength(Main.FirstPlaylist.ID
     [Playlist1.SongSelected], BASS_POS_BYTE)));
   // Stabileste limita superioara a barei de progres la lungimea melodiei (sec)
-  if pbProgressBar.Position = pbProgressBar.Max then
-  // Daca a ajuns la finalul melodiei...
-    SkipToNextSong; // Trece la urmatoarea
+  pbProgressBar.Position := 0;
 end;
 
 procedure TfrmPlayer.ProcessEvents(Sender: TObject);
@@ -214,10 +298,8 @@ begin
   pbProgressBar.Position := pbProgressBar.Position + 1;
   // Se modifica bara de progres
   if pbProgressBar.Position = pbProgressBar.Max then
-  // Daca melodia a ajuns la capat atunci
-  begin
+    // Daca melodia a ajuns la capat atunci
     Timer1.Enabled := false; // Opreste cronometrul;
-  end;
   SecondsElapsed :=
     Round(BASS_ChannelBytes2Seconds(FirstPlaylist.ID[Playlist1.SongSelected],
     BASS_ChannelGetPosition(FirstPlaylist.ID[Playlist1.SongSelected],
@@ -227,6 +309,9 @@ begin
   // ...si numarul de secunde
   lblTimer.Caption := AddLeadingZeroes(MinutesElapsed, 2) + ':' +
     AddLeadingZeroes(SecondsElapsed, 2); // Afiseaza cat timp a trecut
+  if pbProgressBar.Position = pbProgressBar.Max then
+    // Daca a ajuns la finalul melodiei...
+    SkipToNextSong; // Trece la urmatoarea piesa
 end;
 
 procedure TfrmPlayer.ShowOptionsWindow(Sender: TObject);
@@ -285,9 +370,10 @@ end;
 procedure TfrmPlayer.StopSong(Sender: TObject);
 // Ce trebuie facut pentru a opri melodia
 begin
-  BASS_ChannelStop(FirstPlaylist.ID[SongSelected]); //Opreste melodia
-  BASS_ChannelSetPosition(FirstPlaylist.ID[SongSelected],0,BASS_POS_BYTE); //O aduce la inceput (nu stiu de ce nu se face asta automat)
-  pbProgressBar.Position:=0; //Aduce la 0 si bara de progres
+  BASS_ChannelStop(FirstPlaylist.ID[SongSelected]); // Opreste melodia
+  BASS_ChannelSetPosition(FirstPlaylist.ID[SongSelected], 0, BASS_POS_BYTE);
+  // O aduce la inceput (nu stiu de ce nu se face asta automat)
+  pbProgressBar.Position := 0; // Aduce la 0 si bara de progres
   Timer1.Enabled := false;
 end;
 
