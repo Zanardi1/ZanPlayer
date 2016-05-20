@@ -1,5 +1,14 @@
-{TODO : Sa termin procedura SkipToNextSong}
+{TODO : Daca deschid fereastra de adaugare a melodiilor in playlist, apoi apas pe Cancel, programul imi da eroare.}
+{TODO : De adaugat ID3 tags}
+{TODO : Posibilitate de a asculta melodii direct de pe SoundCloud}
+{TODO : Atunci cand fac dublu click pe cronometru, sa imi afiseze cat timp mai e pana la finalul melodiei}
+{TODO : De adaugat un egalizator}
+{TODO : De adaugat posibilitatea de a afisa, la pornirea programului, fie prima fereastra de playlist, fie a doua fereastra de playlist, fie niciuna}
+{TODO : De adaugat posibilitatea de a minimiza aplicatia pe taskbar sau pe systray}
+{TODO :De adaugat posibilitatea de a citi mai multe formate de fisier decat mp3 }}
+{TODO : De introdus posibilitatea de a putea salva playlisturi si in alte formate decat PLS}
+{DONE : Sa termin procedura SkipToNextSong}
 {DONE : Mutarea redarii unei melodii intr-un anumit punct functioneaza numai pentru o fractiune de secunda. Apoi, redarea revine in punctul de unde a plecat.}
 {TODO :Atunci cand aleg 2+ melodii, sunt retinute acestea in ordine alfabetica in odAddSongsToPlaylist.Files, indiferent de ordinea in care vreau eu sa le retin}
-{TODO : Atunci cand este redata o melodie si fac dublu click pe a doua, programul le canta pe amandoua in acelasi timp.}
+{DONE : Atunci cand este redata o melodie si fac dublu click pe a doua, programul le canta pe amandoua in acelasi timp.}
 {TODO : De verificat daca metoda cu stergerile celor doua liste de tip TStrings este potrivita. Trebuie verificat deoarece nu stiu (inca) daca stergerile se vor observa la playlisturi mai mari}

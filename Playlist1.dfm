@@ -72,6 +72,7 @@ object frmPlaylist1: TfrmPlaylist1
     Caption = 'S'
     TabOrder = 5
     TabStop = False
+    OnClick = SaveToPlaylist
   end
   object pmAddToPlaylist: TPopupMenu
     TrackButton = tbLeftButton
@@ -86,7 +87,7 @@ object frmPlaylist1: TfrmPlaylist1
     end
   end
   object odAddSongsToPlaylist: TOpenDialog
-    Filter = 'fisiere mp3|*.mp3'
+    Filter = 'Fisiere mp3|*.mp3'
     Options = [ofHideReadOnly, ofAllowMultiSelect, ofPathMustExist, ofFileMustExist]
     Title = 'Alege melodia sau melodiile dorite'
     Left = 56
@@ -102,5 +103,13 @@ object frmPlaylist1: TfrmPlaylist1
       Caption = 'Sterge playlistul'
       OnClick = DeletePlaylist
     end
+  end
+  object sdSaveToPlaylist: TSaveDialog
+    DefaultExt = 'pls'
+    Filter = 'Playlisturi PLS|*.pls|Playlisturi M3U|*.m3u'
+    Options = [ofOverwritePrompt, ofHideReadOnly, ofPathMustExist, ofEnableSizing]
+    Title = 'Salvare playlist'
+    Left = 176
+    Top = 104
   end
 end

@@ -27,7 +27,7 @@ object frmPlayer: TfrmPlayer
     Caption = '00:00'
   end
   object lblSongName: TLabel
-    Left = 96
+    Left = 66
     Top = 20
     Width = 84
     Height = 13
@@ -183,6 +183,7 @@ object frmPlayer: TfrmPlayer
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000}
     TabOrder = 1
     TabStop = False
+    OnClick = PlayPreviousSong
   end
   object bitbtnPlay: TBitBtn
     Left = 66
@@ -706,6 +707,7 @@ object frmPlayer: TfrmPlayer
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000}
     TabOrder = 5
     TabStop = False
+    OnClick = PlayNextSong
   end
   object bitbtnMute: TBitBtn
     Left = 280

@@ -3,8 +3,8 @@ object frmOptiuni: TfrmOptiuni
   Top = 0
   BorderIcons = [biMinimize, biMaximize]
   Caption = 'Optiuni'
-  ClientHeight = 201
-  ClientWidth = 447
+  ClientHeight = 327
+  ClientWidth = 613
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -15,8 +15,8 @@ object frmOptiuni: TfrmOptiuni
   PixelsPerInch = 96
   TextHeight = 13
   object bitbtnOK: TBitBtn
-    Left = 352
-    Top = 16
+    Left = 530
+    Top = 56
     Width = 75
     Height = 25
     Kind = bkOK
@@ -24,8 +24,8 @@ object frmOptiuni: TfrmOptiuni
     TabOrder = 0
   end
   object bitbtnCancel: TBitBtn
-    Left = 352
-    Top = 144
+    Left = 530
+    Top = 160
     Width = 75
     Height = 25
     Caption = 'Anulare'
@@ -33,18 +33,46 @@ object frmOptiuni: TfrmOptiuni
     NumGlyphs = 2
     TabOrder = 1
   end
-  object TabControl1: TTabControl
-    Left = 16
+  object pcOptions: TPageControl
+    Left = 8
     Top = 16
-    Width = 313
-    Height = 169
-    MultiLine = True
+    Width = 505
+    Height = 305
+    ActivePage = tsMisc
     TabOrder = 2
-    Tabs.Strings = (
-      'Pornire'
-      'Playlist 1'
-      'Diverse')
-    TabIndex = 0
-    TabStop = False
+    object tsMisc: TTabSheet
+      Caption = 'Diverse'
+      object rgMinimizeTo: TRadioGroup
+        Left = 8
+        Top = 8
+        Width = 185
+        Height = 105
+        Caption = 'Minimizare pe'
+        Items.Strings = (
+          'Taskbar'
+          'Systray')
+        TabOrder = 0
+      end
+    end
+    object tsStartup: TTabSheet
+      Caption = 'Pornire'
+      ImageIndex = 1
+      object rgPlaylistStartup: TRadioGroup
+        Left = 16
+        Top = 16
+        Width = 209
+        Height = 161
+        Caption = 'Playlisturi la pornire'
+        Items.Strings = (
+          'Primul playlist'
+          'Al doilea playlist'
+          'Niciunul')
+        TabOrder = 0
+      end
+    end
+    object tsPlaylist1: TTabSheet
+      Caption = 'Playlist 1'
+      ImageIndex = 2
+    end
   end
 end
