@@ -11,9 +11,11 @@ unit GestionareOptiuni;
   8. RepeatSwitch = retine daca este selectata sau nu repetarea playlistului;
   9. ShuffleSwitch = retine daca este selectata sau nu amestecarea melodiilor playlistului;
   10. Muted = retine daca, la inchiderea programului, optiunea de mut era activa sau nu;
+  11. MinimizeToTaskbar = retine daca programul va fi minimizat pe taskbar (variabila ia valoarea true) sau in systray (false).
+  12. PlaylistToShowAtStartup = retine care ferestre sa fie afisate la pornirea programului. Aceasta variabila ia urmatoarele valori: 0 = ambele ferestre; 1 = prima fereastra; 2 = a doua fereastra; 3 = nicio fereastra
 
   Proprietatile sunt marcate ca fiind private, accesul la ele fiind facut prin functia GetOptionXX. Acest lucru e facut pentru a putea face diferite teste inainte de a returna valoarea dorita
-  
+
   Clasa are urmatoarele metode:
   - Constructor;
   - Citirea din fisierul de optiuni
@@ -30,7 +32,7 @@ type
     LowerBound, UpperBound: integer;
   end;
 
-  Bounds = array [1 .. 10] of TBounds;
+  Bounds = array [1 .. 12] of TBounds;
 
   // Tipul de date TBounds retine limita inferioara si cea superioara pentru o
   // anumita optiune.
@@ -62,6 +64,8 @@ type
     RepeatSwitch: boolean;
     ShuffleSwitch: boolean;
     Muted: boolean;
+    MinimizeToTaskBar: boolean;
+    PlaylistToShowAtStartup: integer;
     function TestOptionsFile: boolean;
     function Between(TestValue, LowerBound, UpperBound: integer): boolean;
 
@@ -107,6 +111,10 @@ begin
   B[9].UpperBound := 1;
   B[10].LowerBound := 0;
   B[10].UpperBound := 1;
+  B[11].LowerBound := 0;
+  B[11].UpperBound := 1;
+  B[12].LowerBound := 0;
+  B[12].UpperBound := 4;
 end;
 
 procedure TOptiuni.ReadFromFile;
@@ -120,39 +128,46 @@ var
 begin
   TestCorrect := TestOptionsFile;
   if TestCorrect then
-  begin
-    AssignFile(f, 'Options.txt');
-    Reset(f);
-    Readln(f, XPositionPlayer);
-    Readln(f, YPositionPlayer);
-    Readln(f, XPositionPlaylist1);
-    Readln(f, YPositionPlaylist1);
-    Readln(f, XPositionPlaylist2);
-    Readln(f, YPositionPlaylist2);
-    Readln(f, PlayerVolume);
-    Readln(f, buffer);
-    case buffer of
-      0:
-        RepeatSwitch := false;
-      1:
-        RepeatSwitch := true
-    end;
-    Readln(f, buffer);
-    case buffer of
-      0:
-        ShuffleSwitch := false;
-      1:
-        ShuffleSwitch := true;
-    end;
-    Readln(f, buffer);
-    case buffer of
-      0:
-        Muted := false;
-      1:
-        Muted := true;
-    end;
-    CloseFile(f);
-  end
+    begin
+      AssignFile(f, 'Options.txt');
+      Reset(f);
+      Readln(f, XPositionPlayer);
+      Readln(f, YPositionPlayer);
+      Readln(f, XPositionPlaylist1);
+      Readln(f, YPositionPlaylist1);
+      Readln(f, XPositionPlaylist2);
+      Readln(f, YPositionPlaylist2);
+      Readln(f, PlayerVolume);
+      Readln(f, buffer);
+      case buffer of
+        0:
+          RepeatSwitch := false;
+        1:
+          RepeatSwitch := true
+      end;
+      Readln(f, buffer);
+      case buffer of
+        0:
+          ShuffleSwitch := false;
+        1:
+          ShuffleSwitch := true;
+      end;
+      Readln(f, buffer);
+      case buffer of
+        0:
+          Muted := false;
+        1:
+          Muted := true;
+      end;
+      case buffer of
+        0:
+          MinimizeToTaskBar := true;
+        1:
+          MinimizeToTaskBar := false;
+      end;
+      Readln(f, PlaylistToShowAtStartup);
+      CloseFile(f);
+    end
   else
     Application.MessageBox('Eroare la citirea fisierului de optiuni!',
       'Eroare!', MB_ICONSTOP or MB_OK);
@@ -202,6 +217,11 @@ begin
         PlayerVolume := Value;
         Result := true;
       end;
+    12:
+      begin
+        PlaylistToShowAtStartup := Value;
+        Result := true;
+      end;
   end;
 end;
 
@@ -227,6 +247,11 @@ begin
     10:
       begin
         Muted := Value;
+        Result := true;
+      end;
+    11:
+      begin
+        MinimizeToTaskBar := Value;
         Result := true;
       end;
   end;
@@ -268,6 +293,10 @@ begin
       begin
         Result := PlayerVolume;
       end;
+    12:
+      begin
+        Result := PlaylistToShowAtStartup;
+      end;
   end;
 end;
 
@@ -289,6 +318,10 @@ begin
     10:
       begin
         Result := Muted;
+      end;
+    11:
+      begin
+        Result := MinimizeToTaskBar;
       end;
   end;
 end;
@@ -325,6 +358,13 @@ begin
     false:
       writeln(f, 0);
   end;
+  case MinimizeToTaskBar of
+    true:
+      writeln(f, 1);
+    false:
+      writeln(f, 0);
+  end;
+  writeln(f, PlaylistToShowAtStartup);
   CloseFile(f);
 end;
 
@@ -355,21 +395,22 @@ begin
   i := 1;
   AssignFile(f, 'options.txt');
   Reset(f);
-  while (i <= 10) and TempResult do // secventa de test propriu-zisa
-  begin
-    Readln(f, buffer); // citeste un rand din fisier;
-    buffer := Trim(buffer);
-    if TryStrToInt(buffer, BufferInt) then // daca sirul citit nu are litere...
+  while (i <= 12) and TempResult do // secventa de test propriu-zisa
     begin
-      if Between(BufferInt, B[i].LowerBound, B[i].UpperBound) then
-        TempResult := true
+      Readln(f, buffer); // citeste un rand din fisier;
+      buffer := Trim(buffer);
+      if TryStrToInt(buffer, BufferInt) then
+        // daca sirul citit nu are litere...
+        begin
+          if Between(BufferInt, B[i].LowerBound, B[i].UpperBound) then
+            TempResult := true
+          else
+            TempResult := false;
+        end
       else
         TempResult := false;
-    end
-    else
-      TempResult := false;
-    inc(i);
-  end;
+      inc(i);
+    end;
   CloseFile(f);
   Result := TempResult;
 end;

@@ -12,6 +12,7 @@ object frmOptiuni: TfrmOptiuni
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnCreate = Startup
   PixelsPerInch = 96
   TextHeight = 13
   object bitbtnOK: TBitBtn
@@ -22,6 +23,7 @@ object frmOptiuni: TfrmOptiuni
     Kind = bkOK
     NumGlyphs = 2
     TabOrder = 0
+    OnClick = SaveChanges
   end
   object bitbtnCancel: TBitBtn
     Left = 530
@@ -47,7 +49,7 @@ object frmOptiuni: TfrmOptiuni
         Top = 8
         Width = 185
         Height = 105
-        Caption = 'Minimizare pe'
+        Caption = 'Minimizare pe:'
         Items.Strings = (
           'Taskbar'
           'Systray')
@@ -62,11 +64,12 @@ object frmOptiuni: TfrmOptiuni
         Top = 16
         Width = 209
         Height = 161
-        Caption = 'Playlisturi la pornire'
+        Caption = 'Ferestre de playlist afisate la pornire'
         Items.Strings = (
-          'Primul playlist'
-          'Al doilea playlist'
-          'Niciunul')
+          'Ambele ferestre'
+          'Prima fereastra'
+          'A doua fereastra'
+          'Niciuna')
         TabOrder = 0
       end
     end

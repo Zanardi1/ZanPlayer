@@ -23,6 +23,7 @@ object frmPlaylist1: TfrmPlaylist1
     Height = 153
     TabStop = False
     ItemHeight = 13
+    MultiSelect = True
     TabOrder = 0
     OnDblClick = PlaySelectedSong
   end
@@ -34,6 +35,7 @@ object frmPlaylist1: TfrmPlaylist1
     Caption = 'Up'
     TabOrder = 1
     TabStop = False
+    OnClick = MoveUpOnePos
   end
   object bitbtnDown: TBitBtn
     Left = 336
@@ -43,6 +45,7 @@ object frmPlaylist1: TfrmPlaylist1
     Caption = 'Down'
     TabOrder = 2
     TabStop = False
+    OnClick = MoveDownOnePos
   end
   object bitbtnAddSongs: TBitBtn
     Left = 16
@@ -84,6 +87,7 @@ object frmPlaylist1: TfrmPlaylist1
     end
     object miAddPlaylist: TMenuItem
       Caption = 'Adauga playlist'
+      OnClick = AddAnotherPlaylist
     end
   end
   object odAddSongsToPlaylist: TOpenDialog
@@ -97,7 +101,7 @@ object frmPlaylist1: TfrmPlaylist1
     Left = 176
     Top = 40
     object miDeleteSongs: TMenuItem
-      Caption = 'Sterge melodiile'
+      Caption = 'Sterge melodii'
     end
     object miDeletePlaylist: TMenuItem
       Caption = 'Sterge playlistul'
@@ -111,5 +115,12 @@ object frmPlaylist1: TfrmPlaylist1
     Title = 'Salvare playlist'
     Left = 176
     Top = 104
+  end
+  object odAddAPlaylist: TOpenDialog
+    Filter = 'Playlisturi PLS|*.pls|Playlisturi M3U|*.m3u'
+    Options = [ofHideReadOnly, ofPathMustExist, ofFileMustExist, ofEnableSizing]
+    Title = 'Incarca un playlist'
+    Left = 240
+    Top = 40
   end
 end

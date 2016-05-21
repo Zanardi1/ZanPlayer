@@ -914,4 +914,8 @@ object frmPlayer: TfrmPlayer
     Left = 272
     Top = 16
   end
+  object ttiMinimizeTo: TTrayIcon
+    Left = 344
+    Top = 96
+  end
 end
