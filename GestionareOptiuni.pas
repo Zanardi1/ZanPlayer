@@ -13,6 +13,8 @@ unit GestionareOptiuni;
   10. Muted = retine daca, la inchiderea programului, optiunea de mut era activa sau nu;
   11. MinimizeToTaskbar = retine daca programul va fi minimizat pe taskbar (variabila ia valoarea true) sau in systray (false).
   12. PlaylistToShowAtStartup = retine care ferestre sa fie afisate la pornirea programului. Aceasta variabila ia urmatoarele valori: 0 = ambele ferestre; 1 = prima fereastra; 2 = a doua fereastra; 3 = nicio fereastra
+  13. MinimizeNotification = retine daca programul anunta utilizatorul ca este minimizat pe systray. Aceasta valoare este true, daca utilizatorul este anuntat si false daca nu e anuntat
+  14. PlaylistSongNumber = retine daca piesele din fereastra de playlist vor fi numerotate (true) sau nu (false).
 
   Proprietatile sunt marcate ca fiind private, accesul la ele fiind facut prin functia GetOptionXX. Acest lucru e facut pentru a putea face diferite teste inainte de a returna valoarea dorita
 
@@ -32,7 +34,7 @@ type
     LowerBound, UpperBound: integer;
   end;
 
-  Bounds = array [1 .. 12] of TBounds;
+  Bounds = array [1 .. 14] of TBounds;
 
   // Tipul de date TBounds retine limita inferioara si cea superioara pentru o
   // anumita optiune.
@@ -66,6 +68,8 @@ type
     Muted: boolean;
     MinimizeToTaskBar: boolean;
     PlaylistToShowAtStartup: integer;
+    MinimizeNotification: boolean;
+    PlaylistSongNumber: boolean;
     function TestOptionsFile: boolean;
     function Between(TestValue, LowerBound, UpperBound: integer): boolean;
 
@@ -90,6 +94,10 @@ begin
   RepeatSwitch := true;
   ShuffleSwitch := true;
   Muted := true;
+  MinimizeToTaskBar := true;
+  PlaylistToShowAtStartup := 0;
+  MinimizeNotification := true;
+  PlaylistSongNumber := true;
 
   B[1].LowerBound := 0;
   B[1].UpperBound := Screen.Width;
@@ -114,7 +122,11 @@ begin
   B[11].LowerBound := 0;
   B[11].UpperBound := 1;
   B[12].LowerBound := 0;
-  B[12].UpperBound := 4;
+  B[12].UpperBound := 3;
+  B[13].LowerBound := 0;
+  B[13].UpperBound := 1;
+  B[14].LowerBound := 0;
+  B[14].UpperBound := 1;
 end;
 
 procedure TOptiuni.ReadFromFile;
@@ -159,13 +171,28 @@ begin
         1:
           Muted := true;
       end;
+      Readln(f, buffer);
       case buffer of
         0:
-          MinimizeToTaskBar := true;
-        1:
           MinimizeToTaskBar := false;
+        1:
+          MinimizeToTaskBar := true;
       end;
       Readln(f, PlaylistToShowAtStartup);
+      Readln(f, buffer);
+      case buffer of
+        0:
+          MinimizeNotification := false;
+        1:
+          MinimizeNotification := true;
+      end;
+      Readln(f, buffer);
+      case buffer of
+        0:
+          PlaylistSongNumber := false;
+        1:
+          PlaylistSongNumber := true;
+      end;
       CloseFile(f);
     end
   else
@@ -254,6 +281,16 @@ begin
         MinimizeToTaskBar := Value;
         Result := true;
       end;
+    13:
+      begin
+        MinimizeNotification := Value;
+        Result := true;
+      end;
+    14:
+      begin
+        PlaylistSongNumber := Value;
+        Result := true;
+      end;
   end;
 
 end;
@@ -323,6 +360,14 @@ begin
       begin
         Result := MinimizeToTaskBar;
       end;
+    13:
+      begin
+        Result := MinimizeNotification;
+      end;
+    14:
+      begin
+        Result := PlaylistSongNumber;
+      end;
   end;
 end;
 
@@ -365,6 +410,18 @@ begin
       writeln(f, 0);
   end;
   writeln(f, PlaylistToShowAtStartup);
+  case MinimizeNotification of
+    true:
+      writeln(f, 1);
+    false:
+      writeln(f, 0);
+  end;
+  case PlaylistSongNumber of
+    true:
+      writeln(f, 1);
+    false:
+      writeln(f, 0);
+  end;
   CloseFile(f);
 end;
 
@@ -395,7 +452,7 @@ begin
   i := 1;
   AssignFile(f, 'options.txt');
   Reset(f);
-  while (i <= 12) and TempResult do // secventa de test propriu-zisa
+  while (i <= 13) and TempResult do // secventa de test propriu-zisa
     begin
       Readln(f, buffer); // citeste un rand din fisier;
       buffer := Trim(buffer);

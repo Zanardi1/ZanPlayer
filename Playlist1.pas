@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
-  Vcl.StdCtrls, Vcl.Buttons, Vcl.Menus, BASS, System.AnsiStrings;
+  Vcl.StdCtrls, Vcl.Buttons, Vcl.Menus, BASS, System.AnsiStrings, DeleteSong;
 
 type
   TfrmPlaylist1 = class(TForm)
@@ -24,6 +24,12 @@ type
     miDeletePlaylist: TMenuItem;
     sdSaveToPlaylist: TSaveDialog;
     odAddAPlaylist: TOpenDialog;
+    pmDoAll: TPopupMenu;
+    miAddSongs2: TMenuItem;
+    miAddPlaylist2: TMenuItem;
+    miDeleteSongs2: TMenuItem;
+    miDeletePlaylist2: TMenuItem;
+    miSaveToPlaylist: TMenuItem;
     procedure Startup(Sender: TObject);
     procedure ShowPlaylistMenu(Sender: TObject);
     procedure AddSongsToPlaylist(Sender: TObject);
@@ -34,6 +40,7 @@ type
     procedure AddAnotherPlaylist(Sender: TObject);
     procedure MoveUpOnePos(Sender: TObject);
     procedure MoveDownOnePos(Sender: TObject);
+    procedure DeleteSongs(Sender: TObject);
   private
     { Private declarations }
   public
@@ -125,6 +132,13 @@ begin
                     begin
                       delete(buffer, 1, 7);
                       // Sterge inceputul sirului, inclusiv '='
+                      if Main.OptiuniPlayer.GetOptionBoolean(14) then
+                        // Daca am ales numerotarea playlistului...
+                        buffer := IntToStr
+                          (Main.FirstPlaylist.ShownFileName.Count + 1) + '. ' +
+                          ChangeFileExt(buffer, '')
+                      else // Daca am dezactivat numerotarea playlistului...
+                        buffer := ChangeFileExt(buffer, '');
                       Main.FirstPlaylist.ShownFileName.Add(buffer);
                       lbPlaylist.Items.Add(buffer);
                       // Adauga melodiile si in fereastra de playlist
@@ -194,6 +208,8 @@ begin
                         tratez si citirea lungimii melodiei }
                       delete(buffer, 1, AnsiPos(',', buffer));
                       // Sterg si lungimea melodiei
+                      buffer := IntToStr(Main.FirstPlaylist.ShownFileName.Count
+                        + 1) + '. ' + ChangeFileExt(buffer, '');
                       Main.FirstPlaylist.ShownFileName.Add(buffer);
                       lbPlaylist.Items.Add(buffer);
                     end
@@ -220,7 +236,7 @@ end;
 procedure TfrmPlaylist1.AddSongsToPlaylist(Sender: TObject);
 // Instructiunile necesare adaugarii uneia sau mai multor melodii la playlist
 var
-  i: integer;
+  i: integer; // variabila de ciclare
 begin
   if odAddSongsToPlaylist.Execute(Application.Handle) then
     begin
@@ -230,8 +246,17 @@ begin
       Main.FirstPlaylist.ShownFileName.Clear;
       // Pentru a preveni retinerea aceluiasi fisier de 2+ ori, se sterge toata lista
       for i := 0 to Main.FirstPlaylist.FileName.Count - 1 do
-        Main.FirstPlaylist.ShownFileName.Add
-          (ExtractFileName(Main.FirstPlaylist.FileName.Strings[i]));
+        begin
+          if Main.OptiuniPlayer.GetOptionBoolean(14) then
+            // Daca am ales activarea numerotarii playlistului...
+            Main.FirstPlaylist.ShownFileName.Add(IntToStr(i + 1) + '. ' +
+              ChangeFileExt(ExtractFileName(Main.FirstPlaylist.FileName.
+              Strings[i]), ''))
+          else // Daca am ales dezactivarea numerotarii playlistului...
+            Main.FirstPlaylist.ShownFileName.Add
+              (ChangeFileExt(ExtractFileName(Main.FirstPlaylist.FileName.Strings
+              [i]), ''));
+        end;
       // Adauga numai denumirile fisierelor, fara cai, in structura
       lbPlaylist.Items.Clear;
       // Pentru a preveni afisarea de 2+ ori a aceluiasi fisier, se sterge lista
@@ -253,6 +278,14 @@ begin
   Main.FirstPlaylist.FileName.Clear;
   Main.FirstPlaylist.ShownFileName.Clear;
   SetLength(Main.FirstPlaylist.ID, 0);
+end;
+
+procedure TfrmPlaylist1.DeleteSongs(Sender: TObject);
+{Procedura se ocupa cu stergerea melodiilor din playlist}
+var SD:SongDelete;
+begin
+  SD:=DeleteSong.SongDelete.Create;
+  SD.FreeOnTerminate:=true;
 end;
 
 procedure TfrmPlaylist1.MoveDownOnePos(Sender: TObject);
@@ -284,6 +317,30 @@ begin
           aux := Main.FirstPlaylist.ID[i];
           Main.FirstPlaylist.ID[i] := Main.FirstPlaylist.ID[i + 1];
           Main.FirstPlaylist.ID[i + 1] := aux;
+          if OptiuniPlayer.GetOptionBoolean(14) then
+            // Numeroteaza melodiile, dupa interschimbare, daca utilizatorul a vrut asta.
+            // Aici a vrut numerotare...
+            begin
+              Main.FirstPlaylist.ShownFileName[i + 1] := IntToStr(i + 2) + '. '
+                + ChangeFileExt
+                (ExtractFileName(Main.FirstPlaylist.FileName[i + 1]), '');
+              Main.FirstPlaylist.ShownFileName[i] := IntToStr(i + 1) + '. ' +
+                ChangeFileExt
+                (ExtractFileName(Main.FirstPlaylist.FileName[i]), '');
+            end
+          else // ... aici nu a vrut
+            begin
+              Main.FirstPlaylist.ShownFileName[i + 1] :=
+                ChangeFileExt
+                (ExtractFileName(Main.FirstPlaylist.FileName[i + 1]), '');
+              Main.FirstPlaylist.ShownFileName[i] :=
+                ChangeFileExt
+                (ExtractFileName(Main.FirstPlaylist.FileName[i]), '');
+            end;
+
+          lbPlaylist.Items[i + 1] := Main.FirstPlaylist.ShownFileName[i + 1];
+          lbPlaylist.Items[i] := Main.FirstPlaylist.ShownFileName[i];
+
           lbPlaylist.Selected[i + 1] := true;
         end;
     end;
@@ -318,6 +375,31 @@ begin
           aux := Main.FirstPlaylist.ID[i];
           Main.FirstPlaylist.ID[i] := Main.FirstPlaylist.ID[i - 1];
           Main.FirstPlaylist.ID[i - 1] := aux;
+
+          if OptiuniPlayer.GetOptionBoolean(14) then
+            // Numeroteaza melodiile, dupa interschimbare, daca utilizatorul a vrut asta.
+            // Aici a vrut numerotare...
+            begin
+              Main.FirstPlaylist.ShownFileName[i - 1] := IntToStr(i) + '. ' +
+                ChangeFileExt
+                (ExtractFileName(Main.FirstPlaylist.FileName[i - 1]), '');
+              Main.FirstPlaylist.ShownFileName[i] := IntToStr(i + 1) + '. ' +
+                ChangeFileExt
+                (ExtractFileName(Main.FirstPlaylist.FileName[i]), '');
+            end
+          else // ... aici nu a vrut
+            begin
+              Main.FirstPlaylist.ShownFileName[i - 1] :=
+                ChangeFileExt
+                (ExtractFileName(Main.FirstPlaylist.FileName[i - 1]), '');
+              Main.FirstPlaylist.ShownFileName[i] :=
+                ChangeFileExt
+                (ExtractFileName(Main.FirstPlaylist.FileName[i]), '');
+            end;
+
+          lbPlaylist.Items[i - 1] := Main.FirstPlaylist.ShownFileName[i - 1];
+          lbPlaylist.Items[i] := Main.FirstPlaylist.ShownFileName[i];
+
           lbPlaylist.Selected[i - 1] := true;
         end;
     end;
@@ -427,6 +509,13 @@ begin
   Left := Main.OptiuniPlayer.GetOptionInteger(3);
   // Citeste coordonatele ferestrei
   Top := Main.OptiuniPlayer.GetOptionInteger(4);
+
+  if (Main.OptiuniPlayer.GetOptionInteger(12) = 0) or
+    (Main.OptiuniPlayer.GetOptionInteger(12) = 1) then
+    { Daca din optiuni e setata afisarea acestei ferestre, o afiseaza. Altfel, o ascunde }
+    Show
+  else
+    Hide;
 end;
 
 end.

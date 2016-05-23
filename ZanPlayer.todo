@@ -1,13 +1,14 @@
-{TODO : Bug in procedura PlaySong: daca am playlistul gol, fac click pe butonul Play si apoi click pe Cancel, din fereastra care apare, programul da o eroare.}
-{TODO : Daca deschid fereastra de adaugare a melodiilor in playlist, apoi apas pe Cancel, programul imi da eroare.}
+{DONE : Optiune: sa numeroteze sau sa nu numeroteze melodiile din playlist}
+{DONE : Bug in procedura PlaySong: daca am playlistul gol, fac click pe butonul Play si apoi click pe Cancel, din fereastra care apare, programul da o eroare.}
+{DONE : Daca deschid fereastra de adaugare a melodiilor in playlist, apoi apas pe Cancel, programul imi da eroare.}
 {TODO : De adaugat ID3 tags}
 {TODO : Posibilitate de a asculta melodii direct de pe SoundCloud}
 {TODO : Atunci cand fac dublu click pe cronometru, sa imi afiseze cat timp mai e pana la finalul melodiei}
 {TODO : De adaugat un egalizator}
-{TODO : De adaugat posibilitatea de a afisa, la pornirea programului, fie prima fereastra de playlist, fie a doua fereastra de playlist, fie niciuna}
-{TODO : De adaugat posibilitatea de a minimiza aplicatia pe taskbar sau pe systray}
+{DONE : De adaugat posibilitatea de a afisa, la pornirea programului, fie prima fereastra de playlist, fie a doua fereastra de playlist, fie niciuna}
+{DONE : De adaugat posibilitatea de a minimiza aplicatia pe taskbar sau pe systray}
 {TODO :De adaugat posibilitatea de a citi mai multe formate de fisier decat mp3 }}
-{TODO : De introdus posibilitatea de a putea salva playlisturi si in alte formate decat PLS}
+{DONE : De introdus posibilitatea de a putea salva playlisturi si in alte formate decat PLS}
 {DONE : Sa termin procedura SkipToNextSong}
 {DONE : Mutarea redarii unei melodii intr-un anumit punct functioneaza numai pentru o fractiune de secunda. Apoi, redarea revine in punctul de unde a plecat.}
 {TODO :Atunci cand aleg 2+ melodii, sunt retinute acestea in ordine alfabetica in odAddSongsToPlaylist.Files, indiferent de ordinea in care vreau eu sa le retin}

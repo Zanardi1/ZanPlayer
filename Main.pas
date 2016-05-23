@@ -7,7 +7,8 @@ uses
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.Buttons,
   Bass,
-  Playlist1, Playlist2, Vcl.ExtCtrls, Optiuni, Math, GestionareOptiuni;
+  Playlist1, Playlist2, Vcl.ExtCtrls, Optiuni, Math, GestionareOptiuni,
+  Vcl.AppEvnts, Vcl.Menus;
 
 type
   TfrmPlayer = class(TForm)
@@ -30,6 +31,15 @@ type
     bitbtnOptions: TBitBtn;
     Timer1: TTimer;
     ttiMinimizeTo: TTrayIcon;
+    ApplicationEvents1: TApplicationEvents;
+    ppmTrayIconMenu: TPopupMenu;
+    miPlay: TMenuItem;
+    miPause: TMenuItem;
+    miStop: TMenuItem;
+    miVolumeIncrease: TMenuItem;
+    miVolumeDecrease: TMenuItem;
+    miNextSong: TMenuItem;
+    miPreviousSong: TMenuItem;
     procedure Startup(Sender: TObject);
     procedure ToggleFirstPlaylist(Sender: TObject);
     procedure ToggleSecondPlaylist(Sender: TObject);
@@ -47,6 +57,10 @@ type
     procedure Bye(Sender: TObject);
     procedure PlayNextSong(Sender: TObject);
     procedure PlayPreviousSong(Sender: TObject);
+    procedure MinimizeWindow(Sender: TObject);
+    procedure RestoreApp(Sender: TObject);
+    procedure IncreaseVolume(Sender: TObject);
+    procedure DecreaseVolume(Sender: TObject);
   private
     { Private declarations }
     TempVolume: Integer;
@@ -335,7 +349,6 @@ begin
   OptiuniPlayer.WriteToFile; // Scrie optiunile in fisier
   OptiuniPlayer.Free; // Distruge obiectul
   BASS_Stop;
-  BASS_SetVolume(1);
 end;
 
 procedure TfrmPlayer.ChangeSongVolume(Sender: TObject);
@@ -345,7 +358,42 @@ procedure TfrmPlayer.ChangeSongVolume(Sender: TObject);
 begin
   OptiuniPlayer.SetOptionBoolean(10, false);
   // Daca volumul e dat pe mute si utilizatorul schimba volumul melodiei
-  BASS_SetVolume(tbVolume.Position / 100); // Stabilesc volumul melodiei
+  if FirstPlaylist.FileName.Count > 0 then
+    BASS_ChannelSetAttribute(FirstPlaylist.ID[SongSelected], BASS_ATTRIB_VOL,
+      tbVolume.Position / 100); // Stabilesc volumul melodiei
+end;
+
+procedure TfrmPlayer.DecreaseVolume(Sender: TObject);
+// Procedura scade volumul melodiei cu 10 unitati
+begin
+  tbVolume.Position := tbVolume.Position - 10;
+end;
+
+procedure TfrmPlayer.IncreaseVolume(Sender: TObject);
+// Procedura creste volumul melodiei cu 10 unitati
+begin
+  tbVolume.Position := tbVolume.Position + 10;
+end;
+
+procedure TfrmPlayer.MinimizeWindow(Sender: TObject);
+// Aceasta fereastra se ocupa de minimizarea aplicatiei pe taskbar sau systray
+begin
+  if OptiuniPlayer.GetOptionBoolean(11) = false then
+    // Daca am activat minimizarea pe systray...
+    begin
+      Hide; // Ascunde fereastra
+      WindowState := wsMinimized; // Ii seteaza starea ca fiind minimizata
+      if OptiuniPlayer.GetOptionBoolean(13) then
+        begin
+          ttiMinimizeTo.BalloonTitle := 'Aplicatia este minimizata. ';
+          ttiMinimizeTo.BalloonHint :=
+            'Pentru a o readuce, faceti dublu click pe aceasta pictograma';
+        end
+      else
+        ttiMinimizeTo.BalloonHint := '';
+      ttiMinimizeTo.ShowBalloonHint; // Afiseaza mesajul de avertizare
+      ttiMinimizeTo.Visible := true; // Afiseaza pictograma din systray
+    end;
 end;
 
 procedure TfrmPlayer.MoveSongToPosition(Sender: TObject; Button: TMouseButton;
@@ -417,16 +465,23 @@ var
   hours, mins, secs, i: Integer;
   // hours, mins si secs retin lungimea melodiei care va fi redata, in ore, minute
   // si secunde. Aceste valori sunt atasate titlului melodiei redate, in
-  // fereastra de player (orele sunt utile in cazul mix-urilor house, de exemplu
+  // fereastra de player (orele sunt utile in cazul mix-urilor house, de exemplu)
   // i este variabila de ciclare
 begin
   if FirstPlaylist.FileName.Count = 0 then // Daca playlistul e gol, atunci...
     begin
       Playlist1.frmPlaylist1.AddSongsToPlaylist(Application);
       // Adaug melodii in playlist
-      SongSelected := 0; // Aleg prima melodie ca fiind de redat
+      if FirstPlaylist.FileName.Count = 0
+      { Mai verific o data daca playlistul este gol sau nu. Motivul pentru care
+        fac acest lucru este ca pot sa dau cancel la fereastra de selectie a
+        melodiilor care apare in cadrul procedurii AddSongsToPlaylist, caz in care
+        playlistul ramane tot gol, motiv pentru care programul iese din procedura }
+      then
+        exit
+      else
+        SongSelected := 0; // Aleg prima melodie ca fiind de redat
     end;
-  // ...deschide fereastra de selectie a melodiilor
   i := 0;
   while (i < Playlist1.frmPlaylist1.lbPlaylist.Items.Count) and
     (Playlist1.frmPlaylist1.lbPlaylist.Selected[i] = false) do
@@ -444,7 +499,9 @@ begin
       SongSelected := i; // ...atunci il aleg pe acela.
       Playlist1.frmPlaylist1.lbPlaylist.Selected[i] := true;
     end;
-  BASS_ChannelPlay(Main.FirstPlaylist.ID[Playlist1.SongSelected], false);
+  BASS_ChannelSetAttribute(FirstPlaylist.ID[SongSelected], BASS_ATTRIB_VOL,
+    tbVolume.Position / 100);
+  BASS_ChannelPlay(FirstPlaylist.ID[Playlist1.SongSelected], false);
   // Reda melodia selectata din playlist
   Timer1.Enabled := true; // pornesc cronometrul
   secs := Trunc(Bass.BASS_ChannelBytes2Seconds(Main.FirstPlaylist.ID
@@ -512,6 +569,15 @@ begin
     SkipToNextSong; // Trece la urmatoarea piesa
 end;
 
+procedure TfrmPlayer.RestoreApp(Sender: TObject);
+// Procedura readuce playerul in prim plan
+begin
+  ttiMinimizeTo.Visible := false; // Ascunde pictograma din systray
+  Show; // Arata fereastra
+  WindowState := wsNormal; // Ii stabileste starea la normal
+  Application.BringToFront; // Aduce fereastra de player in prim plan
+end;
+
 procedure TfrmPlayer.ShowOptionsWindow(Sender: TObject);
 var
   Optiuni: TfrmOptiuni;
@@ -525,6 +591,10 @@ procedure TfrmPlayer.Startup(Sender: TObject);
 begin
   OptiuniPlayer := TOptiuni.Create; // Creaza instanta care se ocupa de optiuni
   OptiuniPlayer.ReadFromFile; // Citeste optiunile din fisier
+
+  FirstPlaylist.FileName := TStringList.Create;
+  FirstPlaylist.ShownFileName := TStringList.Create;
+  // Apeleaza constructorii celor doua variabile de tip TStrings
 
   Left := OptiuniPlayer.GetOptionInteger(1);
   // Citeste coordonatele ferestrei playerului
@@ -552,14 +622,8 @@ begin
       shShfLED.Brush.Color := clYellow; // ... e galben.
     end;
 
-  BASS_SetVolume(OptiuniPlayer.GetOptionInteger(7));
-  // Se da volumul melodiei la valoarea citita din fisier
   tbVolume.Position := OptiuniPlayer.GetOptionInteger(7);
   // Se reflecta volumul citit in fereastra
-
-  FirstPlaylist.FileName := TStringList.Create;
-  FirstPlaylist.ShownFileName := TStringList.Create;
-  // Apeleaza constructorii celor doua variabile de tip TStrings
 
   SongSelected := -1;
   // La pornirea programului nu este selectata nicio melodie din playlist

@@ -24,6 +24,7 @@ object frmPlaylist1: TfrmPlaylist1
     TabStop = False
     ItemHeight = 13
     MultiSelect = True
+    PopupMenu = pmDoAll
     TabOrder = 0
     OnDblClick = PlaySelectedSong
   end
@@ -79,8 +80,8 @@ object frmPlaylist1: TfrmPlaylist1
   end
   object pmAddToPlaylist: TPopupMenu
     TrackButton = tbLeftButton
-    Left = 48
-    Top = 80
+    Left = 64
+    Top = 104
     object miAddSongs: TMenuItem
       Caption = 'Adauga melodii'
       OnClick = AddSongsToPlaylist
@@ -98,13 +99,14 @@ object frmPlaylist1: TfrmPlaylist1
     Top = 32
   end
   object pmDeleteFromPlaylist: TPopupMenu
-    Left = 176
-    Top = 40
+    Left = 168
+    Top = 32
     object miDeleteSongs: TMenuItem
       Caption = 'Sterge melodii'
+      OnClick = DeleteSongs
     end
     object miDeletePlaylist: TMenuItem
-      Caption = 'Sterge playlistul'
+      Caption = 'Sterge playlist'
       OnClick = DeletePlaylist
     end
   end
@@ -113,14 +115,38 @@ object frmPlaylist1: TfrmPlaylist1
     Filter = 'Playlisturi PLS|*.pls|Playlisturi M3U|*.m3u'
     Options = [ofOverwritePrompt, ofHideReadOnly, ofPathMustExist, ofEnableSizing]
     Title = 'Salvare playlist'
-    Left = 176
-    Top = 104
+    Left = 168
+    Top = 96
   end
   object odAddAPlaylist: TOpenDialog
     Filter = 'Playlisturi PLS|*.pls|Playlisturi M3U|*.m3u'
     Options = [ofHideReadOnly, ofPathMustExist, ofFileMustExist, ofEnableSizing]
     Title = 'Incarca un playlist'
-    Left = 240
-    Top = 40
+    Left = 264
+    Top = 32
+  end
+  object pmDoAll: TPopupMenu
+    Left = 272
+    Top = 104
+    object miAddSongs2: TMenuItem
+      Caption = 'Adauga melodii'
+      OnClick = AddSongsToPlaylist
+    end
+    object miAddPlaylist2: TMenuItem
+      Caption = 'Adauga playlist'
+      OnClick = AddAnotherPlaylist
+    end
+    object miDeleteSongs2: TMenuItem
+      Caption = 'Sterge melodii'
+      OnClick = DeleteSongs
+    end
+    object miDeletePlaylist2: TMenuItem
+      Caption = 'Sterge playlist'
+      OnClick = DeletePlaylist
+    end
+    object miSaveToPlaylist: TMenuItem
+      Caption = 'Salveaza ca playlist'
+      OnClick = SaveToPlaylist
+    end
   end
 end

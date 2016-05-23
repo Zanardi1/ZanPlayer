@@ -37,6 +37,13 @@ begin
   Left := Main.OptiuniPlayer.GetOptionInteger(5);
   // Citeste coordonatele ferestrei
   Top := Main.OptiuniPlayer.GetOptionInteger(6);
+
+  if (Main.OptiuniPlayer.GetOptionInteger(12) = 0) or
+    (Main.OptiuniPlayer.GetOptionInteger(12) = 2) then
+    { Daca din optiuni e setata afisarea acestei ferestre, o afiseaza. Altfel, o ascunde }
+    Show
+  else
+    Hide;
 end;
 
 end.

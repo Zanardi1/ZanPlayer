@@ -915,7 +915,51 @@ object frmPlayer: TfrmPlayer
     Top = 16
   end
   object ttiMinimizeTo: TTrayIcon
+    Hint = 'ZanPlayer 1.0'
+    BalloonHint = 
+      'Aplicatia este minimizata. Pentru a o readuce, faceti dublu clic' +
+      'k pe aceasta pictograma'
+    BalloonFlags = bfInfo
+    PopupMenu = ppmTrayIconMenu
+    OnDblClick = RestoreApp
     Left = 344
     Top = 96
+  end
+  object ApplicationEvents1: TApplicationEvents
+    OnMinimize = MinimizeWindow
+    Left = 232
+    Top = 24
+  end
+  object ppmTrayIconMenu: TPopupMenu
+    Left = 176
+    Top = 24
+    object miPlay: TMenuItem
+      Caption = 'Redare'
+      OnClick = PlaySong
+    end
+    object miPause: TMenuItem
+      Caption = 'Pauza'
+      OnClick = PauseSong
+    end
+    object miStop: TMenuItem
+      Caption = 'Oprire'
+      OnClick = StopSong
+    end
+    object miNextSong: TMenuItem
+      Caption = 'Melodia urmatoare'
+      OnClick = PlayNextSong
+    end
+    object miPreviousSong: TMenuItem
+      Caption = 'Melodia precedenta'
+      OnClick = PlayPreviousSong
+    end
+    object miVolumeIncrease: TMenuItem
+      Caption = 'Crestere volum'
+      OnClick = IncreaseVolume
+    end
+    object miVolumeDecrease: TMenuItem
+      Caption = 'Scadere volum'
+      OnClick = DecreaseVolume
+    end
   end
 end

@@ -7,7 +7,8 @@ uses
   Playlist1 in 'Playlist1.pas' {frmPlaylist1},
   Playlist2 in 'Playlist2.pas' {frmPlaylist2},
   Optiuni in 'Optiuni.pas' {frmOptiuni},
-  GestionareOptiuni in 'GestionareOptiuni.pas';
+  GestionareOptiuni in 'GestionareOptiuni.pas',
+  DeleteSong in 'DeleteSong.pas';
 
 {$R *.res}
 

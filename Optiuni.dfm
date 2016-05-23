@@ -47,13 +47,29 @@ object frmOptiuni: TfrmOptiuni
       object rgMinimizeTo: TRadioGroup
         Left = 8
         Top = 8
-        Width = 185
+        Width = 161
         Height = 105
         Caption = 'Minimizare pe:'
         Items.Strings = (
           'Taskbar'
           'Systray')
         TabOrder = 0
+      end
+      object cbNotification: TCheckBox
+        Left = 8
+        Top = 119
+        Width = 161
+        Height = 17
+        Caption = 'Anunt minimizare pe systray'
+        TabOrder = 1
+      end
+      object cbPlaylistSongNumbering: TCheckBox
+        Left = 8
+        Top = 144
+        Width = 177
+        Height = 17
+        Caption = 'Numerotarea melodiilor in playlist'
+        TabOrder = 2
       end
     end
     object tsStartup: TTabSheet
