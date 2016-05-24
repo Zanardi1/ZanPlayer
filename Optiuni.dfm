@@ -12,6 +12,7 @@ object frmOptiuni: TfrmOptiuni
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  ShowHint = True
   OnCreate = Startup
   PixelsPerInch = 96
   TextHeight = 13
@@ -60,6 +61,9 @@ object frmOptiuni: TfrmOptiuni
         Top = 119
         Width = 161
         Height = 17
+        Hint = 
+          'Daca e bifata optiunea, este afisat un mesaj la minimizarea prog' +
+          'ramului pe systray.'
         Caption = 'Anunt minimizare pe systray'
         TabOrder = 1
       end
@@ -68,8 +72,22 @@ object frmOptiuni: TfrmOptiuni
         Top = 144
         Width = 177
         Height = 17
+        Hint = 
+          'Daca e bifat, melodiile din fereastra de playlist sunt numerotat' +
+          'e'
         Caption = 'Numerotarea melodiilor in playlist'
         TabOrder = 2
+      end
+      object cbShowTimeElapsed: TCheckBox
+        Left = 8
+        Top = 167
+        Width = 161
+        Height = 17
+        Hint = 
+          'Daca e bifata, afiseaza timpul scurs de la inceperea melodiei. A' +
+          'ltfel este afisat timpul ramas pana la finalul melodiei'
+        Caption = 'Arata timpul scurs din melodie'
+        TabOrder = 3
       end
     end
     object tsStartup: TTabSheet

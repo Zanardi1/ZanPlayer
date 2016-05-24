@@ -20,6 +20,7 @@ type
     rgMinimizeTo: TRadioGroup;
     cbNotification: TCheckBox;
     cbPlaylistSongNumbering: TCheckBox;
+    cbShowTimeElapsed: TCheckBox;
     procedure Startup(Sender: TObject);
     procedure SaveChanges(Sender: TObject);
   private
@@ -91,6 +92,13 @@ begin
       Playlist1.frmPlaylist1.lbPlaylist.Items.AddStrings
         (Main.FirstPlaylist.ShownFileName);
     end;
+
+  if cbShowTimeElapsed.Checked then
+    // Salveaza optiunea de a afisa timpul scurs din melodie sau cel ramas pana
+    // la finalul ei
+    Main.OptiuniPlayer.SetOptionBoolean(15, true)
+  else
+    Main.OptiuniPlayer.SetOptionBoolean(15, false);
 end;
 
 procedure TfrmOptiuni.Startup(Sender: TObject);
@@ -127,6 +135,12 @@ begin
     cbPlaylistSongNumbering.Checked := true
   else
     cbPlaylistSongNumbering.Checked := false;
+
+  if Main.OptiuniPlayer.GetOptionBoolean(15) then
+    // Incarca optiunea de a afisa timpul scurs sau timpul ramas
+    cbShowTimeElapsed.Checked := true
+  else
+    cbShowTimeElapsed.Checked := false;
 end;
 
 end.

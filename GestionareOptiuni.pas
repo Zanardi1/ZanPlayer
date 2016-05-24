@@ -15,6 +15,7 @@ unit GestionareOptiuni;
   12. PlaylistToShowAtStartup = retine care ferestre sa fie afisate la pornirea programului. Aceasta variabila ia urmatoarele valori: 0 = ambele ferestre; 1 = prima fereastra; 2 = a doua fereastra; 3 = nicio fereastra
   13. MinimizeNotification = retine daca programul anunta utilizatorul ca este minimizat pe systray. Aceasta valoare este true, daca utilizatorul este anuntat si false daca nu e anuntat
   14. PlaylistSongNumber = retine daca piesele din fereastra de playlist vor fi numerotate (true) sau nu (false).
+  15. ShowTimeElapsed = retine daca cronometrul ferestrei de player va afisa timpul scurs de la inceputul melodiei (true) sau timpul ramas pana la finalul acesteia (false)
 
   Proprietatile sunt marcate ca fiind private, accesul la ele fiind facut prin functia GetOptionXX. Acest lucru e facut pentru a putea face diferite teste inainte de a returna valoarea dorita
 
@@ -34,7 +35,7 @@ type
     LowerBound, UpperBound: integer;
   end;
 
-  Bounds = array [1 .. 14] of TBounds;
+  Bounds = array [1 .. 15] of TBounds;
 
   // Tipul de date TBounds retine limita inferioara si cea superioara pentru o
   // anumita optiune.
@@ -70,6 +71,7 @@ type
     PlaylistToShowAtStartup: integer;
     MinimizeNotification: boolean;
     PlaylistSongNumber: boolean;
+    ShowTimeElapsed: boolean;
     function TestOptionsFile: boolean;
     function Between(TestValue, LowerBound, UpperBound: integer): boolean;
 
@@ -98,6 +100,7 @@ begin
   PlaylistToShowAtStartup := 0;
   MinimizeNotification := true;
   PlaylistSongNumber := true;
+  ShowTimeElapsed := true;
 
   B[1].LowerBound := 0;
   B[1].UpperBound := Screen.Width;
@@ -127,6 +130,8 @@ begin
   B[13].UpperBound := 1;
   B[14].LowerBound := 0;
   B[14].UpperBound := 1;
+  B[15].LowerBound := 0;
+  B[15].UpperBound := 1;
 end;
 
 procedure TOptiuni.ReadFromFile;
@@ -192,6 +197,13 @@ begin
           PlaylistSongNumber := false;
         1:
           PlaylistSongNumber := true;
+      end;
+      Readln(f, buffer);
+      case buffer of
+        0:
+          ShowTimeElapsed := false;
+        1:
+          ShowTimeElapsed := true;
       end;
       CloseFile(f);
     end
@@ -291,6 +303,11 @@ begin
         PlaylistSongNumber := Value;
         Result := true;
       end;
+    15:
+      begin
+        ShowTimeElapsed := Value;
+        Result := true;
+      end;
   end;
 
 end;
@@ -368,6 +385,10 @@ begin
       begin
         Result := PlaylistSongNumber;
       end;
+    15:
+      begin
+        Result := ShowTimeElapsed;
+      end;
   end;
 end;
 
@@ -417,6 +438,12 @@ begin
       writeln(f, 0);
   end;
   case PlaylistSongNumber of
+    true:
+      writeln(f, 1);
+    false:
+      writeln(f, 0);
+  end;
+  case ShowTimeElapsed of
     true:
       writeln(f, 1);
     false:

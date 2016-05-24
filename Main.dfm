@@ -25,6 +25,7 @@ object frmPlayer: TfrmPlayer
     Height = 13
     Hint = 'Cronometru'
     Caption = '00:00'
+    OnDblClick = ShowElapsedOrRemainingTime
   end
   object lblSongName: TLabel
     Left = 66
