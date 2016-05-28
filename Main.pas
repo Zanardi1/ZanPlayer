@@ -8,7 +8,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.Buttons,
   Bass,
   Playlist1, Playlist2, Vcl.ExtCtrls, Optiuni, Math, GestionareOptiuni,
-  Vcl.AppEvnts, Vcl.Menus, System.AnsiStrings;
+  Vcl.AppEvnts, Vcl.Menus, System.AnsiStrings, ID3ManagementUnit;
 
 type
   TfrmPlayer = class(TForm)
@@ -62,6 +62,7 @@ type
     procedure IncreaseVolume(Sender: TObject);
     procedure DecreaseVolume(Sender: TObject);
     procedure ShowElapsedOrRemainingTime(Sender: TObject);
+    procedure ShowID3Tags(Sender: TObject);
   private
     { Private declarations }
     TempVolume: Integer;
@@ -233,17 +234,20 @@ begin
               if AnsiStartsStr('Title', buffer) then
                 // Daca citeste o inregistrare de tip 'Title#=...', atunci...
                 begin
-                  delete(buffer, 1, AnsiPos('.', buffer));
-                  // Sterge inceputul sirului, inclusiv '='
                   if Main.OptiuniPlayer.GetOptionBoolean(14) then
                     begin
+                      delete(buffer, 1, AnsiPos('.', buffer));
                       // Daca am ales numerotarea playlistului...
                       buffer := ChangeFileExt(buffer, '');
                       buffer := IntToStr(Main.FirstPlaylist.ShownFileName.Count
-                        + 1) + '. ' + buffer;
+                        + 1) + '.' + buffer;
                     end
-                  else // Daca am dezactivat numerotarea playlistului...
-                    buffer := ChangeFileExt(buffer, '');
+                  else
+                    begin
+                      delete(buffer, 1, AnsiPos('=', buffer));
+                      buffer := ChangeFileExt(buffer, '');
+                    end;
+                  // Sterge inceputul sirului, inclusiv '='
                   Main.FirstPlaylist.ShownFileName.Add(buffer);
                   Playlist1.frmPlaylist1.lbPlaylist.Items.Add(buffer);
                   // Adauga melodiile si in fereastra de playlist
@@ -368,6 +372,16 @@ end;
 procedure TfrmPlayer.ShowElapsedOrRemainingTime(Sender: TObject);
 begin
   ShowElapsedOrRemainingSongTime;
+end;
+
+procedure TfrmPlayer.ShowID3Tags(Sender: TObject);
+// Procedura se ocupa de gestionarea ID3 tags pentru melodia care este redata
+var
+  ID3: TfrmID3;
+begin
+  ID3 := TfrmID3.Create(0);
+  ID3.ShowModal;
+  ID3.Free;
 end;
 
 procedure TfrmPlayer.UnselectUnplayedSongs(SongNo: Integer);

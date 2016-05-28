@@ -34,6 +34,7 @@ object frmPlayer: TfrmPlayer
     Height = 13
     Hint = 'Melodia redata'
     Caption = 'Shakira - Ojos Asi'
+    OnDblClick = ShowID3Tags
   end
   object shRepLED: TShape
     Left = 367

@@ -8,7 +8,10 @@ uses
   Playlist2 in 'Playlist2.pas' {frmPlaylist2},
   Optiuni in 'Optiuni.pas' {frmOptiuni},
   GestionareOptiuni in 'GestionareOptiuni.pas',
-  DeleteSong in 'DeleteSong.pas';
+  DeleteSong in 'DeleteSong.pas',
+  ID3v1Library in 'ID3v1Library.pas',
+  ID3v2Library in 'ID3v2Library.pas',
+  ID3ManagementUnit in 'ID3ManagementUnit.pas' {frmID3};
 
 {$R *.res}
 

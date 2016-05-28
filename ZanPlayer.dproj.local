@@ -1,33 +1,39 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899.12.30 00:00:00.000.926,=D:\Delphi XE7\Projects\ZanPlayer\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.125,D:\Delphi XE7\Projects\ZanPlayer\Unit1.pas=D:\Delphi XE7\Projects\ZanPlayer\GestionareOptiuni.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.017,=D:\Delphi XE7\Projects\ZanPlayer\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.541,D:\Delphi XE7\Projects\ZanPlayer\Unit1.pas=D:\Delphi XE7\Projects\ZanPlayer\SongDelete.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.798,=D:\Delphi XE7\Projects\ZanPlayer\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.345,D:\Delphi XE7\Projects\ZanPlayer\Unit1.pas=D:\Delphi XE7\Projects\ZanPlayer\Optiuni.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.801,=D:\Delphi XE7\Projects\ZanPlayer\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.238,D:\Delphi XE7\Projects\ZanPlayer\Unit1.pas=D:\Delphi XE7\Projects\ZanPlayer\Playlist1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.238,D:\Delphi XE7\Projects\ZanPlayer\Unit1.dfm=D:\Delphi XE7\Projects\ZanPlayer\Playlist1.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.345,D:\Delphi XE7\Projects\ZanPlayer\Optiuni.pas=D:\Delphi XE7\Projects\ZanPlayer\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.017,=D:\Delphi XE7\Projects\ZanPlayer\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.884,=D:\Delphi XE7\Projects\ZanPlayer\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.196,=D:\Delphi XE7\Projects\ZanPlayer\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.926,=D:\Delphi XE7\Projects\ZanPlayer\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.425,=D:\Delphi XE7\Projects\ZanPlayer\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.962,=D:\Delphi XE7\Projects\ZanPlayer\ModelSupport_ZanPlayer\default.txaPackage</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.125,D:\Delphi XE7\Projects\ZanPlayer\GestionareOptiuni.pas=D:\Delphi XE7\Projects\ZanPlayer\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.874,D:\Delphi XE7\Projects\Unit1.dfm=D:\Delphi XE7\Projects\ZanPlayer\Main.dfm</Transaction>
     <Transaction>1899.12.30 00:00:00.000.368,=D:\Delphi XE7\Projects\ZanPlayer\ModelSupport_ZanPlayer\BASS\default.txvpck</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.933,D:\Delphi XE7\Projects\ZanPlayer\Unit1.dfm=D:\Delphi XE7\Projects\ZanPlayer\Playlist2.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.933,D:\Delphi XE7\Projects\ZanPlayer\Unit1.pas=D:\Delphi XE7\Projects\ZanPlayer\Playlist2.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.874,D:\Delphi XE7\Projects\ZanPlayer\Main.dfm=D:\Delphi XE7\Projects\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.262,=D:\Delphi XE7\Projects\ZanPlayer\ModelSupport_ZanPlayer\ZanPlayer\default.txvpck</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.600,D:\Delphi XE7\Projects\ZanPlayer\ID3ManagementUnit.pas=D:\Delphi XE7\Projects\ZanPlayer\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.933,D:\Delphi XE7\Projects\ZanPlayer\Playlist2.dfm=D:\Delphi XE7\Projects\ZanPlayer\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.345,D:\Delphi XE7\Projects\ZanPlayer\Unit1.dfm=D:\Delphi XE7\Projects\ZanPlayer\Optiuni.dfm</Transaction>
     <Transaction>1899.12.30 00:00:00.000.508,=D:\Delphi XE7\Projects\ZanPlayer\bass.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.345,D:\Delphi XE7\Projects\ZanPlayer\Optiuni.dfm=D:\Delphi XE7\Projects\ZanPlayer\Unit1.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.316,=D:\Delphi XE7\Projects\ZanPlayer\ModelSupport_ZanPlayer\Playlist2\default.txaPackage</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.939,D:\Delphi XE7\Projects\ZanPlayer\ZanPlayer.dproj=D:\Delphi XE7\Projects\Project1.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.112,=D:\Delphi XE7\Projects\Unit1.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.049,=D:\Delphi XE7\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.238,D:\Delphi XE7\Projects\ZanPlayer\Playlist1.dfm=D:\Delphi XE7\Projects\ZanPlayer\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.874,D:\Delphi XE7\Projects\Unit1.pas=D:\Delphi XE7\Projects\ZanPlayer\Main.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.389,=D:\Delphi XE7\Projects\ZanPlayer\ID3v1Library.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.302,=D:\Delphi XE7\Projects\ZanPlayer\ModelSupport_ZanPlayer\Playlist1\default.txaPackage</Transaction>
     <Transaction>1899.12.30 00:00:00.000.415,=D:\Delphi XE7\Projects\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.112,=D:\Delphi XE7\Projects\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.515,D:\Delphi XE7\Projects\ZanPlayer\SongDelete.pas=D:\Delphi XE7\Projects\ZanPlayer\DeleteSong.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.874,D:\Delphi XE7\Projects\ZanPlayer\Main.pas=D:\Delphi XE7\Projects\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.196,=D:\Delphi XE7\Projects\ZanPlayer\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.262,=D:\Delphi XE7\Projects\ZanPlayer\ModelSupport_ZanPlayer\ZanPlayer\default.txvpck</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.027,=D:\Delphi XE7\Projects\ZanPlayer\ZanPlayer.todo</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.515,D:\Delphi XE7\Projects\ZanPlayer\DeleteSong.pas=D:\Delphi XE7\Projects\ZanPlayer\SongDelete.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.933,D:\Delphi XE7\Projects\ZanPlayer\Playlist2.pas=D:\Delphi XE7\Projects\ZanPlayer\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.600,D:\Delphi XE7\Projects\ZanPlayer\ID3ManagementUnit.dfm=D:\Delphi XE7\Projects\ZanPlayer\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.481,=D:\Delphi XE7\Projects\ZanPlayer\ID3v2Library.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.541,D:\Delphi XE7\Projects\ZanPlayer\SongDelete.pas=D:\Delphi XE7\Projects\ZanPlayer\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.238,D:\Delphi XE7\Projects\ZanPlayer\Playlist1.pas=D:\Delphi XE7\Projects\ZanPlayer\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.939,D:\Delphi XE7\Projects\Project1.dproj=D:\Delphi XE7\Projects\ZanPlayer\ZanPlayer.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.316,=D:\Delphi XE7\Projects\ZanPlayer\ModelSupport_ZanPlayer\Playlist2\default.txaPackage</Transaction>
     <Transaction>1899.12.30 00:00:00.000.798,=D:\Delphi XE7\Projects\ZanPlayer\ModelSupport_ZanPlayer\default.txvpck</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.962,=D:\Delphi XE7\Projects\ZanPlayer\ModelSupport_ZanPlayer\default.txaPackage</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.027,=D:\Delphi XE7\Projects\ZanPlayer\ZanPlayer.todo</Transaction>
   </Transactions>
 </BorlandProject>

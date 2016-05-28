@@ -148,5 +148,9 @@ object frmPlaylist1: TfrmPlaylist1
       Caption = 'Salveaza ca playlist'
       OnClick = SaveToPlaylist
     end
+    object miShowID3Tags: TMenuItem
+      Caption = 'Afiseaza etichete ID3'
+      OnClick = ShowID3Tags
+    end
   end
 end

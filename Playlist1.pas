@@ -5,7 +5,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
-  Vcl.StdCtrls, Vcl.Buttons, Vcl.Menus, BASS, System.AnsiStrings, DeleteSong;
+  Vcl.StdCtrls, Vcl.Buttons, Vcl.Menus, BASS, System.AnsiStrings, DeleteSong,
+  ID3ManagementUnit;
 
 type
   TfrmPlaylist1 = class(TForm)
@@ -30,6 +31,7 @@ type
     miDeleteSongs2: TMenuItem;
     miDeletePlaylist2: TMenuItem;
     miSaveToPlaylist: TMenuItem;
+    miShowID3Tags: TMenuItem;
     procedure Startup(Sender: TObject);
     procedure ShowPlaylistMenu(Sender: TObject);
     procedure AddSongsToPlaylist(Sender: TObject);
@@ -41,6 +43,7 @@ type
     procedure MoveUpOnePos(Sender: TObject);
     procedure MoveDownOnePos(Sender: TObject);
     procedure DeleteSongs(Sender: TObject);
+    procedure ShowID3Tags(Sender: TObject);
   private
     { Private declarations }
   public
@@ -280,6 +283,15 @@ procedure TfrmPlaylist1.ShowDeletePlaylistMenu(Sender: TObject);
 // din playlist
 begin
   pmDeleteFromPlaylist.Popup(Mouse.CursorPos.X, Mouse.CursorPos.Y);
+end;
+
+procedure TfrmPlaylist1.ShowID3Tags(Sender: TObject);
+//Procedura afiseaza tag-urile melodiei alese
+var ID3:TfrmID3;
+begin
+  ID3:=TfrmID3.Create(1);
+  ID3.ShowModal;
+  ID3.Free;
 end;
 
 procedure TfrmPlaylist1.ShowPlaylistMenu(Sender: TObject);
