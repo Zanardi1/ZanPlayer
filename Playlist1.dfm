@@ -1,7 +1,7 @@
 object frmPlaylist1: TfrmPlaylist1
   Left = 0
   Top = 0
-  BorderIcons = [biMinimize, biMaximize]
+  BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'Playlist 1'
   ClientHeight = 214

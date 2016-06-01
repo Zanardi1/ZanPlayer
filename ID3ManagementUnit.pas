@@ -29,15 +29,32 @@ type
     leAlbum2: TLabeledEdit;
     leYear2: TLabeledEdit;
     leTrack2: TLabeledEdit;
-    LabeledEdit1: TLabeledEdit;
     cbGenre2: TComboBox;
     lblGenre2: TLabel;
     cbTagActivate: TCheckBox;
-    constructor Create (SourceWindow:integer);
+    cbTagActivate2: TCheckBox;
+    gbTagInformation: TGroupBox;
+    gbTagAttributes: TGroupBox;
+    lblVersion: TLabel;
+    cbUnsynced: TCheckBox;
+    cbExtendedHeader: TCheckBox;
+    cbExperimental: TCheckBox;
+    cbCRCPresent: TCheckBox;
+    gbComment: TGroupBox;
+    memComment: TMemo;
+    leLanguageID: TLabeledEdit;
+    leDescription: TLabeledEdit;
+    gbLyrics: TGroupBox;
+    memLyrics: TMemo;
+    leLyricsLanguage: TLabeledEdit;
+    leLyricsDescription: TLabeledEdit;
+    leURL: TLabeledEdit;
+    constructor Create(SourceWindow: integer);
     procedure Startup(Sender: TObject);
     procedure SaveTags(Sender: TObject);
     procedure Bye(Sender: TObject);
     procedure ToggleFieldEnabledStates(Sender: TObject);
+    procedure ToggleFieldEnabledStates2(Sender: TObject);
   private
     { Private declarations }
     Tag1: TID3v1Tag;
@@ -64,12 +81,16 @@ implementation
 
 uses Main, Playlist1;
 
+var
+  LanguageID: TLanguageID;
+  Description: string;
+
 {$R *.dfm}
 
-constructor TfrmID3.Create(SourceWindow: Integer);
+constructor TfrmID3.Create(SourceWindow: integer);
 begin
   inherited Create(Application);
-  Source:=SourceWindow;
+  Source := SourceWindow;
 end;
 
 procedure TfrmID3.LoadSelectedFile(FileName: string);
@@ -85,6 +106,12 @@ begin
       exit; // ... si iese din procedura.
     end;
   // Daca a ajuns aici, atunci incarcarea a decurs bine
+  y := Tag2.LoadFromFile(FileName);
+  if (y <> 0) then
+    begin
+      ShowMessage(ID3v2TagErrorCode2String(y));
+      exit;
+    end;
   LoadID3V1Tags(y <> 65535); // Incarca cele doua tipuri de tag-uri
   LoadID3V2Tags(y <> 65535);
 end;
@@ -109,7 +136,28 @@ end;
 
 procedure TfrmID3.LoadID3V2Tags(HaveTags: boolean);
 begin
-
+  cbTagActivate2.Checked := HaveTags;
+  ToggleFieldEnabledStates2(Application);
+  cbUnsynced.Checked := Tag2.Unsynchronised;
+  Tag2.RemoveUnsynchronisationOnAllFrames;
+  leTitle2.Text := Tag2.GetUnicodeText('TIT2');
+  leArtist2.Text := Tag2.GetUnicodeText('TPE1');
+  leAlbum2.Text := Tag2.GetUnicodeText('TALB');
+  leYear2.Text := Tag2.GetUnicodeText('TYER');
+  memComment.Text := Tag2.GetUnicodeComment('COMM', LanguageID, Description);
+  cbGenre2.Text := Tag2.GetUnicodeText('TCON');
+  leTrack2.Text := Tag2.GetUnicodeText('TRCK');
+  lblVersion.Caption := 'Versiunea: ' + InttoStr(Tag2.MajorVersion) + '.' +
+    InttoStr(Tag2.MinorVersion);
+  cbExtendedHeader.Checked := Tag2.ExtendedHeader;
+  cbExperimental.Checked := Tag2.Experimental;
+  cbCRCPresent.Checked := Tag2.ExtendedHeader3.CRCPresent;
+  leLanguageID.Text := LanguageIDtoString(LanguageID);
+  leDescription.Text := Description;
+  memLyrics.Text := Tag2.GetUnicodeLyrics('USLT', LanguageID, Description);
+  leLyricsLanguage.Text := LanguageIDtoString(LanguageID);
+  leLyricsDescription.Text := Description;
+  leURL.Text := Tag2.GetUnicodeUserDefinedURLLink('WXXX', Description);
 end;
 
 procedure TfrmID3.SaveID3V1Tags;
@@ -150,14 +198,60 @@ end;
 
 procedure TfrmID3.SaveID3V2Tags;
 // Procedura se ocupa de salvarea etichetelor ID3V2
+var
+  y: integer;
 begin
-
+  if cbTagActivate2.Checked then
+    // Daca utilziatorul a ales sa pastreze tagurile...
+    begin
+      Tag2.SetUnicodeText('TIT2', leTitle2.Text); // Retine titlul piesei
+      Tag2.SetUnicodeText('TPE1', leArtist2.Text); // Retine artistul
+      Tag2.SetUnicodeText('TALB', leAlbum2.Text);
+      // Retine albumul pe care a aparut
+      Tag2.SetUnicodeText('TYER', leYear2.Text); // Retine anul melodiei
+      if memComment.Text <> '' then
+        begin
+          StringToLanguageID(leLanguageID.Text, LanguageID);
+          Tag2.SetUnicodeComment('COMM', memComment.Text, LanguageID,
+            leDescription.Text);
+        end;
+      Tag2.SetUnicodeText('TCON', cbGenre2.Text); // Retine genul piesei
+      Tag2.SetUnicodeText('TRCK', leTrack2.Text); // Retine numarul piesei
+      if cbUnsynced.Checked then
+        Tag2.ApplyUnsynchronisationOnAllFrames;
+      cbExtendedHeader.Checked := Tag2.ExtendedHeader;
+      cbExperimental.Checked := Tag2.Experimental;
+      cbCRCPresent.Checked := Tag2.ExtendedHeader3.CRCPresent;
+      StringToLanguageID(leLyricsLanguage.Text, LanguageID);
+      Tag2.SetUnicodeLyrics('USLT', memLyrics.Text, LanguageID,
+        leLyricsDescription.Text);
+      Tag2.SetUnicodeUserDefinedURLLink('WXXX', leURL.Text, 'Description');
+      y := Tag2.SaveToFile(FileName); // Salveaza modificarile in fisier
+      if y <> ID3V2LIBRARY_SUCCESS then // Daca salvarea nu a avut succes...
+        begin
+          ShowMessage(ID3v2TagErrorCode2String(y));
+          // Afiseaza un mesaj de eroare
+          exit; // Iese din procedura
+        end;
+    end
+  else // Daca a ales sa elimine tagurile
+    begin
+      y := RemoveID3v2TagFromFile(FileName); // le elimina din fisier
+      if (y <> 0) then // Daca eliminarea nu a avut succes...
+        begin
+          ShowMessage(ID3v2TagErrorCode2String(y));
+          // ...Afiseaza un mesaj de eroare
+          exit; // Iese din procedura
+        end;
+    end;
 end;
 
 procedure TfrmID3.Bye(Sender: TObject);
 begin
-  Tag1.Free;
+  Tag1.Free; // Distrug obiectele corespunzatoare celor 2 tag-uri
   Tag2.Free;
+  EnableMenuItem(GetSystemMenu(handle, False), SC_CLOSE, MF_BYCOMMAND or
+    MF_ENABLED); // Activez butonul de inchidere
 end;
 
 procedure TfrmID3.LoadGenres;
@@ -187,13 +281,15 @@ var
 begin
   Tag1 := TID3v1Tag.Create;
   Tag2 := TID3v2Tag.Create;
+  EnableMenuItem(GetSystemMenu(handle, False), SC_CLOSE, MF_BYCOMMAND or
+    MF_GRAYED); // Dezactivez butonul de inchidere
   LoadGenres; // Incarca genurile muzicale existente
   if Source = 0 then
     index := Playlist1.SongSelected
   else
     begin
       i := 0;
-      selected := false;
+      selected := False;
       while (i <= Playlist1.frmPlaylist1.lbPlaylist.Count - 1) and
         not selected do
         begin
@@ -201,7 +297,7 @@ begin
             break;
           inc(i);
         end;
-      index:=i;
+      index := i;
     end;
   FileName := Main.FirstPlaylist.FileName[index];
   LoadSelectedFile(FileName); // Incarca fisierul selectat
@@ -219,6 +315,16 @@ begin
   cbGenre.Enabled := cbTagActivate.Checked;
   lblGenre.Enabled := cbTagActivate.Checked;
   leTrack.Enabled := cbTagActivate.Checked;
+end;
+
+procedure TfrmID3.ToggleFieldEnabledStates2(Sender: TObject);
+// Procedura activeaza/dezactiveaza campurile pentru etichetele ID3V2, in functie
+// de dorinta utilizatorului
+begin
+  gbTagInformation.Enabled := cbTagActivate2.Checked;
+  gbTagAttributes.Enabled := cbTagActivate2.Checked;
+  gbComment.Enabled := cbTagActivate2.Checked;
+  gbLyrics.Enabled := cbTagActivate2.Checked;
 end;
 
 end.

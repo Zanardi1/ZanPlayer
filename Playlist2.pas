@@ -44,6 +44,9 @@ begin
     Show
   else
     Hide;
+
+  EnableMenuItem(GetSystemMenu(handle, False), SC_CLOSE, MF_BYCOMMAND or
+    MF_GRAYED); // Dezactivez butonul de inchidere a ferestrei
 end;
 
 end.

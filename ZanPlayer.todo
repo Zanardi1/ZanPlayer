@@ -1,8 +1,9 @@
+{TODO : Atunci cand salvez tag-urile, imi da eroare de salvare in fisier, deoarece altcineva il mai foloseste. Eroarea apare la Tag2.SaveToFile}
 {DONE : Salvarea intr-un playlist a melodiilor incarcate in momentul in care inchid programul}
 {DONE : Optiune: sa numeroteze sau sa nu numeroteze melodiile din playlist}
 {DONE : Bug in procedura PlaySong: daca am playlistul gol, fac click pe butonul Play si apoi click pe Cancel, din fereastra care apare, programul da o eroare.}
 {DONE : Daca deschid fereastra de adaugare a melodiilor in playlist, apoi apas pe Cancel, programul imi da eroare.}
-{TODO : De adaugat ID3 tags}
+{DONE : De adaugat ID3 tags}
 {TODO : Posibilitate de a asculta melodii direct de pe SoundCloud}
 {DONE : Atunci cand fac dublu click pe cronometru, sa imi afiseze cat timp mai e pana la finalul melodiei}
 {TODO : De adaugat un egalizator}

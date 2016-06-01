@@ -5338,8 +5338,7 @@ var
     TotalTagSize: Integer;
     i: Integer;
 begin
-    //* TODO: Ext header size
-    TotalTagSize := 10{ + ExtendedHeaderSize3};
+        TotalTagSize := 10{ + ExtendedHeaderSize3};
     if MajorVersion = 3 then begin
         for i := 0 to FrameCount - 1 do begin
             if (Frames[i].Stream.Size = 0)
@@ -9893,8 +9892,7 @@ begin
 
     ConvertString2FrameID('TXXX', TestForFrameID);
     if IsSameFrameID(FrameID, TestForFrameID)
-    //* TODO: all specified frames
-    then begin
+        then begin
         Result := ftTextWithDescription;
     end;
 

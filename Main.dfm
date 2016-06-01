@@ -12,6 +12,8 @@ object frmPlayer: TfrmPlayer
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  GlassFrame.Left = 100
+  GlassFrame.Bottom = 200
   OldCreateOrder = False
   ShowHint = True
   OnCreate = Startup

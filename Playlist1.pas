@@ -286,10 +286,11 @@ begin
 end;
 
 procedure TfrmPlaylist1.ShowID3Tags(Sender: TObject);
-//Procedura afiseaza tag-urile melodiei alese
-var ID3:TfrmID3;
+// Procedura afiseaza tag-urile melodiei alese
+var
+  ID3: TfrmID3;
 begin
-  ID3:=TfrmID3.Create(1);
+  ID3 := TfrmID3.Create(1);
   ID3.ShowModal;
   ID3.Free;
 end;
@@ -319,6 +320,9 @@ begin
     // Daca exista fisierul 'Pl1.pls', cel in care s-au salvat melodiile incarcate
     // in momentul inchiderii programului, atunci il incarca
     Main.frmPlayer.PlaylistLoadingEngine('Pl1.pls');
+
+  EnableMenuItem(GetSystemMenu(Handle, false), SC_CLOSE, MF_BYCOMMAND or
+    MF_GRAYED); // Dezactivez butonul de inchidere
 end;
 
 end.
