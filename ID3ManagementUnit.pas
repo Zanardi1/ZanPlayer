@@ -33,7 +33,7 @@ type
     lblGenre2: TLabel;
     cbTagActivate: TCheckBox;
     cbTagActivate2: TCheckBox;
-    gbTagInformation: TGroupBox;
+    gbTagInformation2: TGroupBox;
     gbTagAttributes: TGroupBox;
     lblVersion: TLabel;
     cbUnsynced: TCheckBox;
@@ -49,6 +49,7 @@ type
     leLyricsLanguage: TLabeledEdit;
     leLyricsDescription: TLabeledEdit;
     leURL: TLabeledEdit;
+    gbTagInformation: TGroupBox;
     constructor Create(SourceWindow: integer);
     procedure Startup(Sender: TObject);
     procedure SaveTags(Sender: TObject);
@@ -137,27 +138,39 @@ end;
 procedure TfrmID3.LoadID3V2Tags(HaveTags: boolean);
 begin
   cbTagActivate2.Checked := HaveTags;
+  // (De)bifeaza checkbox-ul, dupa cum e necesar
   ToggleFieldEnabledStates2(Application);
+  // Activeaza/dezactiveaza celelalte campuri
   cbUnsynced.Checked := Tag2.Unsynchronised;
-  Tag2.RemoveUnsynchronisationOnAllFrames;
-  leTitle2.Text := Tag2.GetUnicodeText('TIT2');
-  leArtist2.Text := Tag2.GetUnicodeText('TPE1');
-  leAlbum2.Text := Tag2.GetUnicodeText('TALB');
-  leYear2.Text := Tag2.GetUnicodeText('TYER');
+  // Citeste daca e sau nu sincronizat
+  Tag2.RemoveUnsynchronisationOnAllFrames; // Elimina sincronizarea (DE CE??)
+  leTitle2.Text := Tag2.GetUnicodeText('TIT2'); // Citeste titlul piesei
+  leArtist2.Text := Tag2.GetUnicodeText('TPE1'); // Citeste artistul
+  leAlbum2.Text := Tag2.GetUnicodeText('TALB'); // Citeste albumul
+  leYear2.Text := Tag2.GetUnicodeText('TYER'); // Citeste anul
   memComment.Text := Tag2.GetUnicodeComment('COMM', LanguageID, Description);
-  cbGenre2.Text := Tag2.GetUnicodeText('TCON');
-  leTrack2.Text := Tag2.GetUnicodeText('TRCK');
+  // Citeste comentariile
+  cbGenre2.Text := Tag2.GetUnicodeText('TCON'); // Citeste genul piesei
+  leTrack2.Text := Tag2.GetUnicodeText('TRCK'); // Citeste numarul melodiei
   lblVersion.Caption := 'Versiunea: ' + InttoStr(Tag2.MajorVersion) + '.' +
-    InttoStr(Tag2.MinorVersion);
+    InttoStr(Tag2.MinorVersion); // Citeste versiunea etichetei
   cbExtendedHeader.Checked := Tag2.ExtendedHeader;
+  // Citeste daca are antet extins
   cbExperimental.Checked := Tag2.Experimental;
+  // Citeste daca e experimental (ce inseamna asta??)
   cbCRCPresent.Checked := Tag2.ExtendedHeader3.CRCPresent;
+  // Citeste daca e prezent CRC
   leLanguageID.Text := LanguageIDtoString(LanguageID);
-  leDescription.Text := Description;
+  // Citeste identificatorul de limba
+  leDescription.Text := Description; // Citeste descrierea
   memLyrics.Text := Tag2.GetUnicodeLyrics('USLT', LanguageID, Description);
+  // Citeste versurile
   leLyricsLanguage.Text := LanguageIDtoString(LanguageID);
+  // Citeste limba versurilor
   leLyricsDescription.Text := Description;
+  // Citeste textul versurilor
   leURL.Text := Tag2.GetUnicodeUserDefinedURLLink('WXXX', Description);
+  // Citeste URL
 end;
 
 procedure TfrmID3.SaveID3V1Tags;
@@ -168,13 +181,13 @@ begin
   if cbTagActivate.Checked then
     // Daca am ales sa pastrez tagurile, atunci incepe sa le salveze in fisier
     begin
-      Tag1.Title := leTitle.Text; // Citeste titlul melodiei
-      Tag1.Artist := leArtist.Text; // Citeste artistul
-      Tag1.Album := leAlbum.Text; // Citeste albumul
-      Tag1.Year := leYear.Text; // Citeste anul
-      Tag1.Comment := leComment.Text; // Citeste comentariile
-      Tag1.Genre := cbGenre.Text; // Citeste genul piesei
-      Tag1.Track := StrToIntDef(leTrack.Text, 0); // Citeste numarul piesei
+      Tag1.Title := leTitle.Text; // Incarca titlul melodiei
+      Tag1.Artist := leArtist.Text; // Incarca artistul
+      Tag1.Album := leAlbum.Text; // Incarca albumul
+      Tag1.Year := leYear.Text; // Incarca anul
+      Tag1.Comment := leComment.Text; // Incarca comentariile
+      Tag1.Genre := cbGenre.Text; // Incarca genul piesei
+      Tag1.Track := StrToIntDef(leTrack.Text, 0); // Incarca numarul piesei
       y := Tag1.SaveToFile(FileName); // Salveaza modificarile
       if y <> 0 then // Daca salvarea nu a avut succes, atunci
         begin
@@ -204,28 +217,28 @@ begin
   if cbTagActivate2.Checked then
     // Daca utilziatorul a ales sa pastreze tagurile...
     begin
-      Tag2.SetUnicodeText('TIT2', leTitle2.Text); // Retine titlul piesei
-      Tag2.SetUnicodeText('TPE1', leArtist2.Text); // Retine artistul
+      Tag2.SetUnicodeText('TIT2', leTitle2.Text); // Incarca titlul piesei
+      Tag2.SetUnicodeText('TPE1', leArtist2.Text); // Incarca artistul
       Tag2.SetUnicodeText('TALB', leAlbum2.Text);
-      // Retine albumul pe care a aparut
-      Tag2.SetUnicodeText('TYER', leYear2.Text); // Retine anul melodiei
+      // Incarca albumul pe care a aparut
+      Tag2.SetUnicodeText('TYER', leYear2.Text); // Incarca anul melodiei
       if memComment.Text <> '' then
         begin
           StringToLanguageID(leLanguageID.Text, LanguageID);
           Tag2.SetUnicodeComment('COMM', memComment.Text, LanguageID,
             leDescription.Text);
         end;
-      Tag2.SetUnicodeText('TCON', cbGenre2.Text); // Retine genul piesei
-      Tag2.SetUnicodeText('TRCK', leTrack2.Text); // Retine numarul piesei
+      Tag2.SetUnicodeText('TCON', cbGenre2.Text); // Incarca genul piesei
+      Tag2.SetUnicodeText('TRCK', leTrack2.Text); // Incarca numarul piesei
       if cbUnsynced.Checked then
         Tag2.ApplyUnsynchronisationOnAllFrames;
-      cbExtendedHeader.Checked := Tag2.ExtendedHeader;
-      cbExperimental.Checked := Tag2.Experimental;
-      cbCRCPresent.Checked := Tag2.ExtendedHeader3.CRCPresent;
-      StringToLanguageID(leLyricsLanguage.Text, LanguageID);
+      cbExtendedHeader.Checked := Tag2.ExtendedHeader; //Incarca daca are antet extins
+      cbExperimental.Checked := Tag2.Experimental; //Incarca daca e experimental
+      cbCRCPresent.Checked := Tag2.ExtendedHeader3.CRCPresent; //Incarca daca are CRC
+      StringToLanguageID(leLyricsLanguage.Text, LanguageID); //Incarca ID-ul limbii
       Tag2.SetUnicodeLyrics('USLT', memLyrics.Text, LanguageID,
-        leLyricsDescription.Text);
-      Tag2.SetUnicodeUserDefinedURLLink('WXXX', leURL.Text, 'Description');
+        leLyricsDescription.Text); //Incarca versurile
+      Tag2.SetUnicodeUserDefinedURLLink('WXXX', leURL.Text, 'Description'); //Incarca URL
       y := Tag2.SaveToFile(FileName); // Salveaza modificarile in fisier
       if y <> ID3V2LIBRARY_SUCCESS then // Daca salvarea nu a avut succes...
         begin
@@ -284,11 +297,11 @@ begin
   EnableMenuItem(GetSystemMenu(handle, False), SC_CLOSE, MF_BYCOMMAND or
     MF_GRAYED); // Dezactivez butonul de inchidere
   LoadGenres; // Incarca genurile muzicale existente
-  if Source = 0 then
-    index := Playlist1.SongSelected
-  else
+  if Source = 0 then //Daca am apelat aceasta fereastra din fereastra playerului (prin dublu click)...
+    index := Playlist1.SongSelected //... alege indexul ca fiind melodia selectata
+  else //Daca am apelat-o din fereastra de playlist...
     begin
-      i := 0;
+      i := 0; //... atunci de aici...
       selected := False;
       while (i <= Playlist1.frmPlaylist1.lbPlaylist.Count - 1) and
         not selected do
@@ -297,9 +310,9 @@ begin
             break;
           inc(i);
         end;
-      index := i;
+      index := i; //.. si pana aici caut prima melodie selectata din playlist
     end;
-  FileName := Main.FirstPlaylist.FileName[index];
+  FileName := Main.FirstPlaylist.FileName[index]; //Selectez numarul de ordine al fisierului care urmeaza sa fie ales
   LoadSelectedFile(FileName); // Incarca fisierul selectat
 end;
 
@@ -321,7 +334,7 @@ procedure TfrmID3.ToggleFieldEnabledStates2(Sender: TObject);
 // Procedura activeaza/dezactiveaza campurile pentru etichetele ID3V2, in functie
 // de dorinta utilizatorului
 begin
-  gbTagInformation.Enabled := cbTagActivate2.Checked;
+  gbTagInformation2.Enabled := cbTagActivate2.Checked;
   gbTagAttributes.Enabled := cbTagActivate2.Checked;
   gbComment.Enabled := cbTagActivate2.Checked;
   gbLyrics.Enabled := cbTagActivate2.Checked;

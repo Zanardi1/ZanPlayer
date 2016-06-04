@@ -32,10 +32,10 @@ object frmPlayer: TfrmPlayer
   object lblSongName: TLabel
     Left = 66
     Top = 20
-    Width = 84
+    Width = 67
     Height = 13
     Hint = 'Melodia redata'
-    Caption = 'Shakira - Ojos Asi'
+    Caption = 'ZanPlayer 1.0'
     OnDblClick = ShowID3Tags
   end
   object shRepLED: TShape
@@ -912,6 +912,30 @@ object frmPlayer: TfrmPlayer
     TabStop = False
     OnClick = ShowOptionsWindow
   end
+  object bitbtnEqualizer: TBitBtn
+    Left = 305
+    Top = 39
+    Width = 25
+    Height = 25
+    Hint = 'Egalizator'
+    Caption = 'EQ'
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 13
+    TabStop = False
+    OnClick = ShowEqualizerWindow
+  end
+  object bitbtnAbout: TBitBtn
+    Left = 336
+    Top = 104
+    Width = 25
+    Height = 25
+    Hint = 'Despre program'
+    Caption = 'A'
+    TabOrder = 14
+    TabStop = False
+    OnClick = ShowAboutWindow
+  end
   object Timer1: TTimer
     Enabled = False
     OnTimer = ProcessEvents
@@ -926,8 +950,8 @@ object frmPlayer: TfrmPlayer
     BalloonFlags = bfInfo
     PopupMenu = ppmTrayIconMenu
     OnDblClick = RestoreApp
-    Left = 344
-    Top = 96
+    Left = 88
+    Top = 32
   end
   object ApplicationEvents1: TApplicationEvents
     OnMinimize = MinimizeWindow

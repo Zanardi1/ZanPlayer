@@ -110,10 +110,15 @@ end;
 procedure TfrmPlaylist1.DeletePlaylist(Sender: TObject);
 // Procedura sterge intreg playlistul incarcat
 begin
+  Main.frmPlayer.StopSong(Application);
+  { Deoarece este posibil ca utilizatorul sa stearga playlistul in timp ce este
+    redata o melodie (fapt ce provoaca o eroare, pe buna dreptate), este oprita
+    melodia care este redata inainte de a sterge }
   lbPlaylist.Clear;
   Main.FirstPlaylist.FileName.Clear;
   Main.FirstPlaylist.ShownFileName.Clear;
   SetLength(Main.FirstPlaylist.ID, 0);
+  Main.frmPlayer.lblSongName.Caption:='ZanPlayer 1.0';
 end;
 
 procedure TfrmPlaylist1.DeleteSongs(Sender: TObject);
@@ -148,7 +153,7 @@ begin
         begin
           { Schimba intre ele melodiile din playlist, precum si din reprezentarea
             interna a acestuia }
-          lbPlaylist.Items.Exchange(i, i + 1);
+          lbPlaylist.Items.Exchange(i, i + 1); // Schimba cele doua melodii
           Main.FirstPlaylist.FileName.Exchange(i, i + 1);
           Main.FirstPlaylist.ShownFileName.Exchange(i, i + 1);
           aux := Main.FirstPlaylist.ID[i];
@@ -290,9 +295,16 @@ procedure TfrmPlaylist1.ShowID3Tags(Sender: TObject);
 var
   ID3: TfrmID3;
 begin
-  ID3 := TfrmID3.Create(1);
-  ID3.ShowModal;
-  ID3.Free;
+  if lbPlaylist.Items.Count > 0 then // Daca e macar o melodie in playlist...
+    begin
+      ID3 := TfrmID3.Create(1); // ...atunci afiseaza fereastra
+      ID3.ShowModal;
+      ID3.Free;
+    end
+  else
+    MessageBox(Application.Handle,
+      'In playlist nu este incarcata nicio melodie!', 'Eroare',
+      MB_OK or MB_ICONWARNING);
 end;
 
 procedure TfrmPlaylist1.ShowPlaylistMenu(Sender: TObject);

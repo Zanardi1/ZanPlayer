@@ -11,7 +11,9 @@ uses
   DeleteSong in 'DeleteSong.pas',
   ID3v1Library in 'ID3v1Library.pas',
   ID3v2Library in 'ID3v2Library.pas',
-  ID3ManagementUnit in 'ID3ManagementUnit.pas' {frmID3};
+  ID3ManagementUnit in 'ID3ManagementUnit.pas' {frmID3},
+  Egalizator in 'Egalizator.pas' {frmEqualizer},
+  About in 'About.pas' {frmAbout};
 
 {$R *.res}
 

@@ -25,85 +25,93 @@ object frmID3: TfrmID3
     TabOrder = 0
     object tsID3V1: TTabSheet
       Caption = 'ID3V1'
-      object lblGenre: TLabel
+      object gbTagInformation: TGroupBox
         Left = 11
-        Top = 230
-        Width = 60
-        Height = 13
-        Caption = 'Gen muzical:'
-      end
-      object leTitle: TLabeledEdit
-        Left = 77
-        Top = 55
-        Width = 121
-        Height = 21
-        EditLabel.Width = 24
-        EditLabel.Height = 13
-        EditLabel.Caption = 'Titlu:'
-        LabelPosition = lpLeft
+        Top = 42
+        Width = 222
+        Height = 242
+        Caption = 'Informatii despre eticheta'
         TabOrder = 0
-      end
-      object leArtist: TLabeledEdit
-        Left = 77
-        Top = 85
-        Width = 121
-        Height = 21
-        EditLabel.Width = 30
-        EditLabel.Height = 13
-        EditLabel.Caption = 'Artist:'
-        LabelPosition = lpLeft
-        TabOrder = 1
-      end
-      object leAlbum: TLabeledEdit
-        Left = 77
-        Top = 118
-        Width = 121
-        Height = 21
-        EditLabel.Width = 33
-        EditLabel.Height = 13
-        EditLabel.Caption = 'Album:'
-        LabelPosition = lpLeft
-        TabOrder = 2
-      end
-      object leYear: TLabeledEdit
-        Left = 77
-        Top = 154
-        Width = 121
-        Height = 21
-        EditLabel.Width = 17
-        EditLabel.Height = 13
-        EditLabel.Caption = 'An:'
-        LabelPosition = lpLeft
-        TabOrder = 3
-      end
-      object leComment: TLabeledEdit
-        Left = 77
-        Top = 192
-        Width = 121
-        Height = 21
-        EditLabel.Width = 59
-        EditLabel.Height = 13
-        EditLabel.Caption = 'Comentariu:'
-        LabelPosition = lpLeft
-        TabOrder = 4
-      end
-      object cbGenre: TComboBox
-        Left = 77
-        Top = 227
-        Width = 121
-        Height = 21
-        TabOrder = 5
-      end
-      object leTrack: TLabeledEdit
-        Left = 77
-        Top = 263
-        Width = 121
-        Height = 21
-        EditLabel.Width = 63
-        EditLabel.Height = 13
-        EditLabel.Caption = 'Numar piesa:'
-        LabelPosition = lpLeft
-        TabOrder = 6
+        object lblGenre: TLabel
+          Left = 11
+          Top = 177
+          Width = 60
+          Height = 13
+          Caption = 'Gen muzical:'
+        end
+        object leComment: TLabeledEdit
+          Left = 77
+          Top = 139
+          Width = 121
+          Height = 21
+          EditLabel.Width = 59
+          EditLabel.Height = 13
+          EditLabel.Caption = 'Comentariu:'
+          LabelPosition = lpLeft
+          TabOrder = 0
+        end
+        object leTrack: TLabeledEdit
+          Left = 77
+          Top = 209
+          Width = 121
+          Height = 21
+          EditLabel.Width = 63
+          EditLabel.Height = 13
+          EditLabel.Caption = 'Numar piesa:'
+          LabelPosition = lpLeft
+          TabOrder = 1
+        end
+        object leYear: TLabeledEdit
+          Left = 77
+          Top = 112
+          Width = 121
+          Height = 21
+          EditLabel.Width = 17
+          EditLabel.Height = 13
+          EditLabel.Caption = 'An:'
+          LabelPosition = lpLeft
+          TabOrder = 2
+        end
+        object leTitle: TLabeledEdit
+          Left = 77
+          Top = 31
+          Width = 121
+          Height = 21
+          EditLabel.Width = 24
+          EditLabel.Height = 13
+          EditLabel.Caption = 'Titlu:'
+          LabelPosition = lpLeft
+          TabOrder = 3
+        end
+        object leAlbum: TLabeledEdit
+          Left = 77
+          Top = 85
+          Width = 121
+          Height = 21
+          EditLabel.Width = 33
+          EditLabel.Height = 13
+          EditLabel.Caption = 'Album:'
+          LabelPosition = lpLeft
+          TabOrder = 4
+        end
+        object leArtist: TLabeledEdit
+          Left = 77
+          Top = 58
+          Width = 121
+          Height = 21
+          EditLabel.Width = 30
+          EditLabel.Height = 13
+          EditLabel.Caption = 'Artist:'
+          LabelPosition = lpLeft
+          TabOrder = 5
+        end
+        object cbGenre: TComboBox
+          Left = 77
+          Top = 174
+          Width = 121
+          Height = 21
+          TabOrder = 6
+        end
       end
       object cbTagActivate: TCheckBox
         Left = 11
@@ -111,14 +119,14 @@ object frmID3: TfrmID3
         Width = 187
         Height = 17
         Caption = 'Activare tag ID3V1'
-        TabOrder = 7
+        TabOrder = 1
         OnClick = ToggleFieldEnabledStates
       end
     end
     object tsID3V2: TTabSheet
       Caption = 'ID3V2'
       ImageIndex = 1
-      object gbTagInformation: TGroupBox
+      object gbTagInformation2: TGroupBox
         Left = 11
         Top = 42
         Width = 214

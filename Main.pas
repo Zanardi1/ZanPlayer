@@ -8,7 +8,8 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.Buttons,
   Bass,
   Playlist1, Playlist2, Vcl.ExtCtrls, Optiuni, Math, GestionareOptiuni,
-  Vcl.AppEvnts, Vcl.Menus, System.AnsiStrings, ID3ManagementUnit;
+  Vcl.AppEvnts, Vcl.Menus, System.AnsiStrings, ID3ManagementUnit, Egalizator,
+  About;
 
 type
   TfrmPlayer = class(TForm)
@@ -40,6 +41,8 @@ type
     miVolumeDecrease: TMenuItem;
     miNextSong: TMenuItem;
     miPreviousSong: TMenuItem;
+    bitbtnEqualizer: TBitBtn;
+    bitbtnAbout: TBitBtn;
     procedure Startup(Sender: TObject);
     procedure ToggleFirstPlaylist(Sender: TObject);
     procedure ToggleSecondPlaylist(Sender: TObject);
@@ -63,6 +66,8 @@ type
     procedure DecreaseVolume(Sender: TObject);
     procedure ShowElapsedOrRemainingTime(Sender: TObject);
     procedure ShowID3Tags(Sender: TObject);
+    procedure ShowEqualizerWindow(Sender: TObject);
+    procedure ShowAboutWindow(Sender: TObject);
   private
     { Private declarations }
     TempVolume: Integer;
@@ -142,7 +147,7 @@ begin
             Bass.BASS_ChannelGetLength(FirstPlaylist.ID[i], BASS_POS_BYTE)))));
         end;
       writeln(f, 'NumberOfEntries=' + IntToStr(FirstPlaylist.FileName.Count));
-      writeln(f, 'Version=2');
+      write(f, 'Version=2');
       CloseFile(f);
       exit;
     end;
@@ -339,6 +344,14 @@ begin
   CloseFile(f);
 end;
 
+procedure TfrmPlayer.ShowAboutWindow(Sender: TObject);
+var
+  A: TfrmAbout;
+begin
+  A := TfrmAbout.Create(Application);
+  A.Show;
+end;
+
 procedure TfrmPlayer.ShowElapsedOrRemainingSongTime;
 { Procedura arata cat timp a trecut din melodie sau cat timp a mai ramas, in functie
   de preferintele utilziatorului }
@@ -374,14 +387,30 @@ begin
   ShowElapsedOrRemainingSongTime;
 end;
 
+procedure TfrmPlayer.ShowEqualizerWindow(Sender: TObject);
+// Procedura afiseaza fereastra egalizatorului
+var
+  EQ: TfrmEqualizer;
+begin
+  EQ := TfrmEqualizer.Create(Application);
+  EQ.Show;
+end;
+
 procedure TfrmPlayer.ShowID3Tags(Sender: TObject);
 // Procedura se ocupa de gestionarea ID3 tags pentru melodia care este redata
 var
   ID3: TfrmID3;
 begin
-  ID3 := TfrmID3.Create(0);
-  ID3.ShowModal;
-  ID3.Free;
+  if Bass.BASS_ChannelGetPosition(FirstPlaylist.ID[SongSelected], BASS_POS_BYTE)
+    > 0 then // Daca e incarcata o melodie in player, atunci...
+    begin // ... ii afiseaza etichetele.
+      ID3 := TfrmID3.Create(0);
+      ID3.ShowModal;
+      ID3.Free;
+    end
+  else // Daca nu, atunci afiseaza un mesaj de eroare
+    MessageBox(Application.Handle, 'In player nu este incarcata nicio melodie!',
+      'Eroare', MB_OK or MB_ICONWARNING);
 end;
 
 procedure TfrmPlayer.UnselectUnplayedSongs(SongNo: Integer);
@@ -742,11 +771,12 @@ end;
 procedure TfrmPlayer.PlaySong(Sender: TObject);
 // Ce trebuie facut pentru a reda melodia aleasa
 var
-  hours, mins, secs, i: Integer;
+  hours, mins, secs, i, OldSong: Integer;
   // hours, mins si secs retin lungimea melodiei care va fi redata, in ore, minute
   // si secunde. Aceste valori sunt atasate titlului melodiei redate, in
   // fereastra de player (orele sunt utile in cazul mix-urilor house, de exemplu)
   // i este variabila de ciclare
+  // OldSong retine numarul de identificare a melodiei care este redata la intrarea in rutina
 begin
   if FirstPlaylist.FileName.Count = 0 then // Daca playlistul e gol, atunci...
     begin
@@ -763,6 +793,7 @@ begin
         SongSelected := 0; // Aleg prima melodie ca fiind de redat
     end;
   i := 0;
+  OldSong := SongSelected;
   while (i < Playlist1.frmPlaylist1.lbPlaylist.Items.Count) and
     (Playlist1.frmPlaylist1.lbPlaylist.Selected[i] = false) do
     inc(i);
@@ -779,8 +810,13 @@ begin
       SongSelected := i; // ...atunci il aleg pe acela.
       Playlist1.frmPlaylist1.lbPlaylist.Selected[i] := true;
     end;
+  BASS_ChannelStop(FirstPlaylist.ID[OldSong]);
+  // Opreste vechea melodie care se reda
   BASS_ChannelSetAttribute(FirstPlaylist.ID[SongSelected], BASS_ATTRIB_VOL,
-    tbVolume.Position / 100);
+    tbVolume.Position / 100); // Seteaza volumul piesei
+  BASS_ChannelSetPosition(FirstPlaylist.ID[SongSelected], 0, BASS_POS_BYTE);
+  // Aduce la 0 pozitia in care incepe redarea (functie utila in cazul in care
+  // utilizatorul apasa "play" in timp ce canta o melodie
   BASS_ChannelPlay(FirstPlaylist.ID[Playlist1.SongSelected], false);
   // Reda melodia selectata din playlist
   Timer1.Enabled := true; // pornesc cronometrul
@@ -875,20 +911,24 @@ begin
     // Daca playerul repeta playlistul, atunci...
     begin
       shRepLED.Brush.Color := clRed; // LED-ul e rosu.
+      shRepLED.Hint := 'Playlistul se repeta';
     end
   else // Daca nu, atunci...
     begin
       shRepLED.Brush.Color := clYellow; // ...e galben.
+      shRepLED.Hint := 'Playlistul nu se repeta';
     end;
 
   if OptiuniPlayer.GetOptionBoolean(9) then
     // Daca playerul reda piesele aleatoriu, atunci...
     begin
       shShfLED.Brush.Color := clRed; // LED-ul e rosu.
+      shShfLED.Hint := 'Redare aleatoare a melodiilor';
     end
   else // Daca nu, atunci...
     begin
       shShfLED.Brush.Color := clYellow; // ... e galben.
+      shShfLED.Hint := 'Redare secventiala a melodiilor';
     end;
 
   tbVolume.Position := OptiuniPlayer.GetOptionInteger(7);
@@ -929,10 +969,12 @@ begin
     // Daca playerul repeta playlistul...
     begin
       shRepLED.Brush.Color := clRed; // ...led-ul e rosu.
+      shRepLED.Hint := 'Playlistul se repeta';
     end
   else // Altfel...
     begin
       shRepLED.Brush.Color := clYellow; // ...e galben
+      shRepLED.Hint := 'Playlistul nu se repeta';
     end;
 end;
 
@@ -952,10 +994,12 @@ begin
     // Daca playerul trebuie sa redea melodiile in ordine aleatorie...
     begin
       shShfLED.Brush.Color := clRed; // ...led-ul e rosu.
+      shShfLED.Hint := 'Redare aleatoare a melodiilor';
     end
   else // Altfel...
     begin
       shShfLED.Brush.Color := clYellow; // ...led-ul e galben.
+      shShfLED.Hint := 'Redare secventiala a melodiilor';
     end;
 end;
 

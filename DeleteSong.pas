@@ -64,7 +64,6 @@ var
   // i,j = variabile de ciclare; Max = lungimea playlistului;
 begin
   { Place thread code here }
-  ShowMessage('Aici sterg melodii din playlist');
   Max := Playlist1.frmPlaylist1.lbPlaylist.Items.Count - 1;
   // retin numarul de melodii din playlist
   i := 0;

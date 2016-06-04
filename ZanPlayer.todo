@@ -1,3 +1,9 @@
+{DONE : Daca apas play pe o melodie, in timp ce playerul reda o alta, atunci sunt redate amandoua piesele in acelasi timp}
+{TODO :De adaugat fereastra de about}
+{DONE : Eroare cand sterg playlistul in timp ce canta o melodie}
+
+
+{TODO : Dureaza foarte mult incarcarea playlisturilor mari (cca 10 secunde pentru un playlist de 1083 de melodii)}
 {TODO : Atunci cand salvez tag-urile, imi da eroare de salvare in fisier, deoarece altcineva il mai foloseste. Eroarea apare la Tag2.SaveToFile}
 {DONE : Salvarea intr-un playlist a melodiilor incarcate in momentul in care inchid programul}
 {DONE : Optiune: sa numeroteze sau sa nu numeroteze melodiile din playlist}
@@ -15,4 +21,6 @@
 {DONE : Mutarea redarii unei melodii intr-un anumit punct functioneaza numai pentru o fractiune de secunda. Apoi, redarea revine in punctul de unde a plecat.}
 {TODO :Atunci cand aleg 2+ melodii, sunt retinute acestea in ordine alfabetica in odAddSongsToPlaylist.Files, indiferent de ordinea in care vreau eu sa le retin}
 {DONE : Atunci cand este redata o melodie si fac dublu click pe a doua, programul le canta pe amandoua in acelasi timp.}
-{TODO : De verificat daca metoda cu stergerile celor doua liste de tip TStrings este potrivita. Trebuie verificat deoarece nu stiu (inca) daca stergerile se vor observa la playlisturi mai mari}
+{DONE : De verificat daca metoda cu stergerile celor doua liste de tip TStrings este potrivita. Trebuie verificat deoarece nu stiu (inca) daca stergerile se vor observa la playlisturi mai mari
+
+(Actualizare 2 iunie: aparent metoda este potrivita. A durat sub o secunda stergerea ultimei melodii dintr-un playlist de 1083 de melodii)}
